@@ -1,5 +1,6 @@
 package com.example.consumpto.meter.dto
 
+import com.example.consumpto.meter.currencyScale
 import com.example.consumpto.meter.entities.FuelRefill
 import org.springframework.stereotype.Component
 
@@ -10,7 +11,7 @@ class DtoMapper {
             refill.fuelType,
             refill.amount,
             refill.pricePerLiter,
-            refill.pricePerLiter * refill.amount
+            (refill.pricePerLiter * refill.amount).currencyScale()
         )
     }
 

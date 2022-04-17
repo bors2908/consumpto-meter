@@ -68,6 +68,7 @@ class ConsumptoMeterService(
             prevDate = date
         }
 
+        // Add everything left as the last month.
         val lastDate = sortedEntities.last().date
 
         monthly[getMonthString(lastDate)] = acc
@@ -78,7 +79,7 @@ class ConsumptoMeterService(
     private fun getMonthString(date: LocalDate): String {
         val monthName = date.month
             .getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault())
-            .capitalize(Locale.getDefault())
+            .capitalize()
 
         return "$monthName ${date.year}"
     }
@@ -89,5 +90,5 @@ class ConsumptoMeterService(
         return this
     }
 
-    private fun FuelRefill.getCost() = this.amount * this.pricePerLiter
+    private fun FuelRefill.getCost() = (this.amount * this.pricePerLiter).currencyScale()
 }
