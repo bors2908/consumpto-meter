@@ -17,6 +17,10 @@ open class FuelRefill(
     override val date: LocalDate,
 ) : Entity {
     override var id: Long? = null
+
+    override fun toString(): String {
+        return "FuelRefill(fuelType=$fuelType, pricePerLiter=$pricePerLiter, amount=$amount, driverId=$driverId, date=$date, id=$id)"
+    }
 }
 
 data class FuelStat(
