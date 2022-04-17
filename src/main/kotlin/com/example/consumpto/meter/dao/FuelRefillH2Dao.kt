@@ -4,6 +4,7 @@ import com.example.consumpto.meter.entities.FuelRefill
 import com.example.consumpto.meter.entities.FuelType
 import java.math.BigDecimal
 import java.sql.ResultSet
+import java.sql.SQLDataException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert
@@ -11,82 +12,130 @@ import org.springframework.stereotype.Component
 
 @Component
 class FuelRefillH2Dao(private val jdbcTemplate: JdbcTemplate) : FuelRefillDao() {
-    private val refillInsert = SimpleJdbcInsert(jdbcTemplate)
-        .withTableName("refills")
-        .usingGeneratedKeyColumns("id")
+    companion object {
+        private const val REFILLS_TABLE_NAME = "refills"
+        private const val ID_COLUMN_NAME = "id"
+        private const val FUEL_TYPE_COLUMN_NAME = "fuel_type"
+        private const val PRICE_PER_LITER_COLUMN_NAME = "price_per_liter"
+        private const val AMOUNT_COLUMN_NAME = "amount"
+        private const val DRIVER_ID_COLUMN_NAME = "driver_id"
+        private const val DATE_COLUMN_NAME = "date"
 
-    init {
-        executeScript()
+        private const val CREATE_SQL_SCRIPT = "CREATE TABLE $REFILLS_TABLE_NAME (" +
+                "   $ID_COLUMN_NAME IDENTITY, \n" +
+                "   $FUEL_TYPE_COLUMN_NAME VARCHAR(4) NOT NULL, \n" +
+                "   $PRICE_PER_LITER_COLUMN_NAME NUMERIC(20, 2) NOT NULL, \n" +
+                "   $AMOUNT_COLUMN_NAME NUMERIC(20, 2) NOT NULL, \n" +
+                "   $DRIVER_ID_COLUMN_NAME BIGINT NOT NULL, \n" +
+                "   $DATE_COLUMN_NAME DATE" +
+                ");"
     }
 
-    private fun executeScript() {
-        jdbcTemplate.update(
-            "CREATE TABLE refills (" +
-                    "   id IDENTITY, \n" +
-                    "   fuel_type VARCHAR(4) NOT NULL, \n" +
-                    "   price_per_liter NUMERIC(20, 2) NOT NULL, \n" +
-                    "   amount NUMERIC(20, 2) NOT NULL, \n" +
-                    "   driver_id BIGINT NOT NULL, \n" +
-                    "   date DATE" +
-                    ");")
+    private val refillInsert = SimpleJdbcInsert(jdbcTemplate)
+        .withTableName(REFILLS_TABLE_NAME)
+        .usingGeneratedKeyColumns(ID_COLUMN_NAME)
 
+    init {
+        jdbcTemplate.update(CREATE_SQL_SCRIPT)
     }
 
     override fun getAllRefillsSorted(driverId: Long?): List<FuelRefill> {
         return jdbcTemplate.query(
-            "SELECT * FROM refills " +
-                    if (driverId != null) "WHERE driver_id = $driverId" else "" +
-                    "ORDER BY date;",
+            "SELECT * " +
+                    "FROM $REFILLS_TABLE_NAME " +
+                    if (driverId != null) "WHERE $DRIVER_ID_COLUMN_NAME = $driverId" else "" +
+                    "ORDER BY $DATE_COLUMN_NAME;",
             RefillRowMapper()
         )
     }
 
     override fun getAll(): List<FuelRefill> {
-        return jdbcTemplate.query("SELECT * FROM refills;", RefillRowMapper())
+        return jdbcTemplate.query("SELECT * FROM $REFILLS_TABLE_NAME;", RefillRowMapper())
     }
 
     override fun get(id: Long): FuelRefill? {
-        return jdbcTemplate.queryForObject("SELECT * FROM refills WHERE id = ?;", RefillRowMapper(), id)
+        return jdbcTemplate.queryForObject(
+            "SELECT * " +
+                    "FROM $REFILLS_TABLE_NAME " +
+                    "WHERE $ID_COLUMN_NAME = ?;",
+            RefillRowMapper(),
+            id
+        )
     }
 
     override fun add(t: FuelRefill): Long {
-        val parameters = mapOf<String, Any>(
-            "fuel_type" to  t.fuelType.name,
-            "price_per_liter" to  t.pricePerLiter,
-            "amount" to  t.amount,
-            "driver_id" to t.driverId,
-            "date" to t.date
+        return refillInsert.executeAndReturnKey(t.toParametersMap()).toLong()
+    }
+
+    override fun update(t: FuelRefill): Boolean {
+        val updated = jdbcTemplate.update(
+            "UPDATE $REFILLS_TABLE_NAME " +
+                    "SET " +
+                    "$FUEL_TYPE_COLUMN_NAME = ?, " +
+                    "$PRICE_PER_LITER_COLUMN_NAME = ?, " +
+                    "$AMOUNT_COLUMN_NAME  = ?, " +
+                    "$DRIVER_ID_COLUMN_NAME  = ?, " +
+                    "$DATE_COLUMN_NAME  = ?, " +
+                    "WHERE $ID_COLUMN_NAME = ?;",
+            t.fuelType,
+            t.pricePerLiter,
+            t.amount,
+            t.driverId,
+            t.date,
+            t.id
         )
 
-        return refillInsert.executeAndReturnKey(parameters).toLong()
+        return processSingleUpdateResult(updated, "$updated rows were updated instead of one.")
     }
 
-    override fun update(t: FuelRefill, params: List<Pair<String, Any>>) {
-        TODO("Not yet implemented")
+    override fun delete(id: Long): Boolean {
+        val deleted = jdbcTemplate.update(
+            "DELETE " +
+                    "FROM $REFILLS_TABLE_NAME " +
+                    "WHERE $ID_COLUMN_NAME = ?;",
+            id
+        )
+
+        return processSingleUpdateResult(deleted, "$deleted rows were deleted instead of one.")
     }
 
-    override fun delete(t: FuelRefill) {
-        TODO("Not yet implemented")
+    private fun processSingleUpdateResult(updated: Int, message: String): Boolean {
+        return when (updated) {
+            0 -> false
+            1 -> true
+            // Most likely unreachable.
+            else -> throw SQLDataException(message)
+        }
     }
 
     override fun addAll(collection: Collection<FuelRefill>): List<Long> {
-        // TODO Change to batch
-        return collection.map{ add(it) }
+        // Batch update did not allow getting generated keys.
+        return collection.map { add(it) }
+    }
+
+    private fun FuelRefill.toParametersMap() = mapOf<String, Any>(
+        FUEL_TYPE_COLUMN_NAME to this.fuelType.name,
+        PRICE_PER_LITER_COLUMN_NAME to this.pricePerLiter,
+        AMOUNT_COLUMN_NAME to this.amount,
+        DRIVER_ID_COLUMN_NAME to this.driverId,
+        DATE_COLUMN_NAME to this.date
+    )
+
+    class RefillRowMapper : RowMapper<FuelRefill> {
+        override fun mapRow(rs: ResultSet, rowNum: Int): FuelRefill {
+            val refill = FuelRefill(
+                fuelType = FuelType.valueOf(rs.getString(FUEL_TYPE_COLUMN_NAME)),
+                pricePerLiter = BigDecimal(rs.getString(PRICE_PER_LITER_COLUMN_NAME)),
+                amount = BigDecimal(rs.getString(AMOUNT_COLUMN_NAME)),
+                driverId = rs.getLong(DRIVER_ID_COLUMN_NAME),
+                date = rs.getDate(DATE_COLUMN_NAME).toLocalDate()
+            )
+
+            refill.id = rs.getLong(ID_COLUMN_NAME)
+
+            return refill
+        }
     }
 }
 
-class RefillRowMapper : RowMapper<FuelRefill> {
-    override fun mapRow(rs: ResultSet, rowNum: Int): FuelRefill {
-        val refill = FuelRefill(
-            fuelType = FuelType.valueOf(rs.getString("fuel_type")),
-            pricePerLiter = BigDecimal(rs.getString("price_per_liter")),
-            amount = BigDecimal(rs.getString("amount")),
-            driverId = rs.getLong("driver_id"),
-            date = rs.getDate("date").toLocalDate()
-        )
 
-        refill.id = rs.getLong("id")
-
-        return refill
-    }
-}

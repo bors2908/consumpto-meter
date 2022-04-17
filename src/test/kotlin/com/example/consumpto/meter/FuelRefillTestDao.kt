@@ -28,11 +28,11 @@ class FuelRefillTestDao: FuelRefillDao() {
         return storage.addAll(collection)
     }
 
-    override fun update(t: FuelRefill, params: List<Pair<String, Any>>) {
-        return storage.update(t, params)
+    override fun update(t: FuelRefill): Boolean {
+        return storage.update(t)
     }
 
-    override fun delete(t: FuelRefill) {
-        return storage.delete(t)
+    override fun delete(id: Long): Boolean {
+        return storage.delete(id)
     }
 }

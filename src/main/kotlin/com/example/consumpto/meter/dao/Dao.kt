@@ -11,7 +11,7 @@ interface Dao<T: Entity> {
 
     fun addAll(collection: Collection<T>): List<Long>
 
-    fun update(t: T, params: List<Pair<String, Any>>)
+    fun update(t: T): Boolean
 
-    fun delete(t: T)
+    fun delete(id: Long): Boolean
 }
