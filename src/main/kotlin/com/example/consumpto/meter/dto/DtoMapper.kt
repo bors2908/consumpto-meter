@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 class DtoMapper {
     fun statToDto(stats: Map<FuelType, FuelStat>): List<StatDTO> {
         return stats
-            .filter { it.value.amount == BigDecimal.ZERO && it.value.totalPrice == BigDecimal.ZERO }
+            .filter { it.value.amount != BigDecimal.ZERO }
             .map {
             val stat = it.value
 
