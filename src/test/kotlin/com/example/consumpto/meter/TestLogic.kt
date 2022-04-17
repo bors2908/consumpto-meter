@@ -31,6 +31,6 @@ class TestLogic() {
     @Test
     fun testMonthly() {
         meterService.getCostByMonth().forEach{ println(it) }
-        meterService.getCostByMonth().forEach{ println(it) }
+        meterService.getStatsByMonth().forEach{ println(it) }
     }
 }

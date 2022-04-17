@@ -4,6 +4,7 @@ import com.example.consumpto.meter.ConsumptoMeterService
 import com.example.consumpto.meter.dto.AddRefillDTO
 import com.example.consumpto.meter.dto.DtoMapper
 import com.example.consumpto.meter.dto.RefillDTO
+import com.example.consumpto.meter.dto.StatDTO
 import java.math.BigDecimal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -30,16 +31,22 @@ class ConsumptionRestController(
         return service.addRefills(addRefills.map { mapper.addRefillDtoToRefill(it) })
     }
 
-    @GetMapping(path = ["/getConsumptionAmount"])
+    @GetMapping(path = ["/monthlyAmount"])
     @ResponseBody
-    fun getConsumptionAmount(@RequestBody driverId: Long? = null): Map<String, BigDecimal> {
+    fun getMonthlyAmount(@RequestBody driverId: Long? = null): Map<String, BigDecimal> {
         return service.getCostByMonth(driverId)
     }
 
-    @GetMapping(path = ["/getConsumptionStats"])
+    @GetMapping(path = ["/monthlyRefills"])
     @ResponseBody
-    fun getConsumptionStats(@RequestBody driverId: Long? = null): Map<String, List<RefillDTO>> {
+    fun getMonthlyRefills(@RequestBody driverId: Long? = null): Map<String, List<RefillDTO>> {
         return service.getRefillsByMonth(driverId)
             .mapValues { it.value.map { e -> mapper.refillToDto(e) } }
+    }
+
+    @GetMapping(path = ["/monthlyStats"])
+    @ResponseBody
+    fun getMonthlyStats(@RequestBody driverId: Long? = null): Map<String, List<StatDTO>> {
+        return service.getStatsByMonth(driverId).mapValues { mapper.statToDto(it.value) }
     }
 }

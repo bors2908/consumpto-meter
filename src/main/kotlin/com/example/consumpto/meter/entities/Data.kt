@@ -19,6 +19,11 @@ open class FuelRefill(
     override var id: Long? = null
 }
 
+data class FuelStat(
+    var amount: BigDecimal,
+    var totalPrice: BigDecimal
+)
+
 enum class FuelType(@JsonValue val type: String) {
     P98("98"),
     P95("95"),

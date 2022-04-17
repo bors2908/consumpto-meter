@@ -7,6 +7,13 @@ import java.time.LocalDate
 data class RefillDTO(
     val fuelType: FuelType,
     val amount: BigDecimal,
+    val pricePerLiter: BigDecimal,
+    val totalPrice: BigDecimal
+)
+
+data class StatDTO(
+    val fuelType: FuelType,
+    val amount: BigDecimal,
     val avgPricePerLiter: BigDecimal,
     val totalPrice: BigDecimal
 )

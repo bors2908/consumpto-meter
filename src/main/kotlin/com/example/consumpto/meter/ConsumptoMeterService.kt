@@ -3,6 +3,8 @@ package com.example.consumpto.meter
 import com.example.consumpto.meter.dao.FuelRefillDao
 import com.example.consumpto.meter.entities.Entity
 import com.example.consumpto.meter.entities.FuelRefill
+import com.example.consumpto.meter.entities.FuelStat
+import com.example.consumpto.meter.entities.FuelType
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -30,6 +32,20 @@ class ConsumptoMeterService(
             sortedEntities = allRefills,
             newAcc = { mutableListOf() },
             addToAcc = { acc, entity -> acc.addAndReturnList(entity) }
+        )
+    }
+
+    fun getStatsByMonth(driverId: Long? = null): Map<String, Map<FuelType, FuelStat>> {
+        val allRefills = refillDao.getAllRefillsSorted(driverId)
+
+        return getMonthlyMap(
+            sortedEntities = allRefills,
+            newAcc = {
+                FuelType.values()
+                    .associateWith { FuelStat(BigDecimal.ZERO, BigDecimal.ZERO) }
+                    .toMutableMap()
+            },
+            addToAcc = { acc, entity -> acc.processRefillAndReturnMap(entity) }
         )
     }
 
@@ -86,6 +102,15 @@ class ConsumptoMeterService(
 
     private fun <E> MutableList<E>.addAndReturnList(element: E): MutableList<E> {
         this.add(element)
+
+        return this
+    }
+
+    private fun MutableMap<FuelType, FuelStat>.processRefillAndReturnMap(refill: FuelRefill): MutableMap<FuelType, FuelStat> {
+        val stat = this.getValue(refill.fuelType)
+
+        stat.amount += refill.amount
+        stat.totalPrice += refill.getCost()
 
         return this
     }
