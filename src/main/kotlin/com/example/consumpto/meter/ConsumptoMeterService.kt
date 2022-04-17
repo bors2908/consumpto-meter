@@ -49,10 +49,6 @@ class ConsumptoMeterService(
         )
     }
 
-    fun addRefill(refill: FuelRefill): Long {
-        return refillDao.add(refill)
-    }
-
     fun addRefills(refills: List<FuelRefill>): List<Long> {
         return refillDao.addAll(refills)
     }

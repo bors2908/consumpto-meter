@@ -19,12 +19,6 @@ class ConsumptionRestController(
     private val service: ConsumptoMeterService,
     private val mapper: DtoMapper
 ) {
-    @PostMapping(path = ["/addRefill"])
-    @ResponseBody
-    fun addRefill(@RequestBody addRefill: AddRefillDTO): Long {
-        return service.addRefill(mapper.addRefillDtoToRefill(addRefill))
-    }
-
     @PostMapping(path = ["/addRefills"])
     @ResponseBody
     fun addRefills(@RequestBody addRefills: List<AddRefillDTO>): List<Long> {
