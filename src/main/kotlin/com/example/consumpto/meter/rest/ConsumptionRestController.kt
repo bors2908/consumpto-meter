@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/consumption")
 class ConsumptionRestController(
     private val service: ConsumptoMeterService,
-    private val mapper: DtoMapper
+    private val mapper: DtoMapper,
 ) {
     @PostMapping(path = ["/addRefills"])
     @ResponseBody
@@ -32,19 +32,18 @@ class ConsumptionRestController(
     @GetMapping(path = ["/monthlyAmount"])
     @ResponseBody
     fun getMonthlyAmount(@RequestBody @Valid @Positive driverId: Long? = null): Map<String, BigDecimal> {
-        return service.getCostByMonth(driverId)
+        return mapper.mapMonthKeys(service.getCostByMonth(driverId))
     }
 
     @GetMapping(path = ["/monthlyRefills"])
     @ResponseBody
     fun getMonthlyRefills(@RequestBody @Valid @Positive driverId: Long? = null): Map<String, List<RefillDTO>> {
-        return service.getRefillsByMonth(driverId)
-            .mapValues { it.value.map { e -> mapper.refillToDto(e) } }
+        return mapper.mapRefills(service.getRefillsByMonth(driverId))
     }
 
     @GetMapping(path = ["/monthlyStats"])
     @ResponseBody
     fun getMonthlyStats(@RequestBody @Valid @Positive driverId: Long? = null): Map<String, List<StatDTO>> {
-        return service.getStatsByMonth(driverId).mapValues { mapper.statToDto(it.value) }
+        return mapper.mapStats(service.getStatsByMonth(driverId))
     }
 }

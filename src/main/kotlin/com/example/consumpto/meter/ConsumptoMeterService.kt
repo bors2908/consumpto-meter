@@ -7,15 +7,14 @@ import com.example.consumpto.meter.domain.FuelStat
 import com.example.consumpto.meter.domain.FuelType
 import java.math.BigDecimal
 import java.time.LocalDate
-import java.time.format.TextStyle
-import java.util.Locale
+import java.time.YearMonth
 import org.springframework.stereotype.Service
 
 @Service
 class ConsumptoMeterService(
     private val refillDao: FuelRefillDao,
 ) {
-    fun getCostByMonth(driverId: Long? = null): Map<String, BigDecimal> {
+    fun getCostByMonth(driverId: Long? = null): Map<YearMonth, BigDecimal> {
         val allRefills = refillDao.getAllRefillsSorted(driverId)
 
         return getMonthlyMap(
@@ -25,7 +24,7 @@ class ConsumptoMeterService(
         )
     }
 
-    fun getRefillsByMonth(driverId: Long? = null): Map<String, MutableList<FuelRefill>> {
+    fun getRefillsByMonth(driverId: Long? = null): Map<YearMonth, List<FuelRefill>> {
         val allRefills = refillDao.getAllRefillsSorted(driverId)
 
         return getMonthlyMap(
@@ -35,7 +34,7 @@ class ConsumptoMeterService(
         )
     }
 
-    fun getStatsByMonth(driverId: Long? = null): Map<String, Map<FuelType, FuelStat>> {
+    fun getStatsByMonth(driverId: Long? = null): Map<YearMonth, Map<FuelType, FuelStat>> {
         val allRefills = refillDao.getAllRefillsSorted(driverId)
 
         return getMonthlyMap(
@@ -53,44 +52,38 @@ class ConsumptoMeterService(
         sortedEntities: List<R>,
         newAcc: () -> T,
         addToAcc: (acc: T, entity: R) -> T,
-    ): Map<String, T> {
+    ): Map<YearMonth, T> {
         if (sortedEntities.isEmpty()) return emptyMap()
 
-        val monthly = mutableMapOf<String, T>()
+        val monthly = mutableMapOf<YearMonth, T>()
 
         var acc = newAcc.invoke()
 
-        var prevDate = sortedEntities.first().date
+        var prevMonth = sortedEntities.first().date.toYearMonth()
 
         for (entity in sortedEntities) {
-            val date = entity.date
+            val month = entity.date.toYearMonth()
 
-            if (date.year != prevDate.year || date.month != prevDate.month) {
-                monthly[getMonthString(prevDate)] = acc
+            if (month != prevMonth) {
+                monthly[prevMonth] = acc
 
                 acc = newAcc.invoke()
             }
 
             acc = addToAcc.invoke(acc, entity)
 
-            prevDate = date
+            prevMonth = month
         }
 
         // Add everything left as the last month.
-        val lastDate = sortedEntities.last().date
+        val lastMonth = sortedEntities.last().date.toYearMonth()
 
-        monthly[getMonthString(lastDate)] = acc
+        monthly[lastMonth] = acc
 
         return monthly
     }
 
-    private fun getMonthString(date: LocalDate): String {
-        val monthName = date.month
-            .getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault())
-            .capitalize()
-
-        return "$monthName ${date.year}"
-    }
+    private fun LocalDate.toYearMonth() = YearMonth.of(this.year, this.month)
 
     private fun <E> MutableList<E>.addAndReturnList(element: E): MutableList<E> {
         this.add(element)
@@ -99,11 +92,7 @@ class ConsumptoMeterService(
     }
 
     private fun MutableMap<FuelType, FuelStat>.processRefillAndReturnMap(refill: FuelRefill): MutableMap<FuelType, FuelStat> {
-        if (!this.contains(refill.fuelType)) {
-            this[refill.fuelType] = FuelStat(BigDecimal.ZERO, BigDecimal.ZERO)
-        }
-
-        val stat = this.getValue(refill.fuelType)
+        val stat = this.getOrPut(refill.fuelType) { FuelStat(BigDecimal.ZERO, BigDecimal.ZERO) }
 
         stat.amount += refill.amount
         stat.totalPrice += refill.getCost()
