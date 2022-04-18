@@ -1,14 +1,17 @@
-package com.example.consumpto.meter
+package com.example.consumpto.meter.unit
 
-import com.example.consumpto.meter.entities.FuelType.D
-import com.example.consumpto.meter.entities.FuelType.P95
-import com.example.consumpto.meter.entities.FuelType.P98
+import com.example.consumpto.meter.ConsumptoMeterService
+import com.example.consumpto.meter.dao.FuelRefillTestDao
+import com.example.consumpto.meter.TestFuelRefill
+import com.example.consumpto.meter.domain.FuelType.D
+import com.example.consumpto.meter.domain.FuelType.P95
+import com.example.consumpto.meter.domain.FuelType.P98
 import java.time.LocalDate
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class TestLogic() {
-
+class ConsumptoMeterServiceUnitTest {
     private val testDao = FuelRefillTestDao()
     private val meterService = ConsumptoMeterService(testDao)
 
@@ -28,10 +31,28 @@ class TestLogic() {
         ))
     }
 
+    @AfterEach
+    fun tearDown() {
+        testDao.deleteAll()
+    }
+
     @Test
-    fun testMonthly() {
-        meterService.getCostByMonth().forEach{ println(it) }
-        meterService.getStatsByMonth().forEach{ println(it) }
+    fun testGetTotalCost() {
+        meterService.getCostByMonth().forEach { println(it) }
+    }
+
+    @Test
+    fun testGetStats() {
+        meterService.getStatsByMonth().forEach { println(it) }
+    }
+
+    @Test
+    fun testGetRefills() {
         meterService.getRefillsByMonth().forEach{ println(it) }
+    }
+
+    @Test
+    fun addRefills() {
+
     }
 }

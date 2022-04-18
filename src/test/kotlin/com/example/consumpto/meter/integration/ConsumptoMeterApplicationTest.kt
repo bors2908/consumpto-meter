@@ -1,10 +1,10 @@
-package com.example.consumpto.meter
+package com.example.consumpto.meter.integration
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class ConsumptoMeterApplicationTests {
+class ConsumptoMeterApplicationTest {
     @Test
     fun contextLoads() {
     }

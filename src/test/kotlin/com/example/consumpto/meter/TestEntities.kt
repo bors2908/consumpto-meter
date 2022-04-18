@@ -1,7 +1,7 @@
 package com.example.consumpto.meter
 
-import com.example.consumpto.meter.entities.FuelRefill
-import com.example.consumpto.meter.entities.FuelType
+import com.example.consumpto.meter.domain.FuelRefill
+import com.example.consumpto.meter.domain.FuelType
 import java.math.BigDecimal
 import java.time.LocalDate
 

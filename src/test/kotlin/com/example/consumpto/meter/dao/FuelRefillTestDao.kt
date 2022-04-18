@@ -1,7 +1,6 @@
-package com.example.consumpto.meter
+package com.example.consumpto.meter.dao
 
-import com.example.consumpto.meter.dao.FuelRefillDao
-import com.example.consumpto.meter.entities.FuelRefill
+import com.example.consumpto.meter.domain.FuelRefill
 
 class FuelRefillTestDao: FuelRefillDao() {
     private val storage = TestStorage<FuelRefill>()
@@ -34,5 +33,9 @@ class FuelRefillTestDao: FuelRefillDao() {
 
     override fun delete(id: Long): Boolean {
         return storage.delete(id)
+    }
+
+    fun deleteAll() {
+        return storage.deleteAll()
     }
 }

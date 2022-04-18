@@ -1,10 +1,10 @@
-package com.example.consumpto.meter
+package com.example.consumpto.meter.dao
 
-import com.example.consumpto.meter.entities.Entity
+import com.example.consumpto.meter.domain.Entity
 import java.security.InvalidParameterException
 
 class TestStorage<T : Entity> {
-    private val storage = mutableMapOf<Long, T>()
+    private var storage = mutableMapOf<Long, T>()
     private var lastId = 0L
 
     fun getAll(): List<T> {
@@ -37,5 +37,9 @@ class TestStorage<T : Entity> {
 
     fun delete(id: Long): Boolean {
         return storage.values.remove(get(id))
+    }
+
+    fun deleteAll() {
+        storage = mutableMapOf()
     }
 }
