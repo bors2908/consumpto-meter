@@ -1,5 +1,6 @@
 package com.example.consumpto.meter.domain
 
+import com.example.consumpto.meter.currencyScale
 import com.fasterxml.jackson.annotation.JsonValue
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -18,6 +19,8 @@ open class FuelRefill(
 ) : Entity {
     override var id: Long? = null
 
+    val cost get() = (this.amount * this.pricePerLiter).currencyScale()
+
     override fun toString(): String {
         return "FuelRefill(fuelType=$fuelType, pricePerLiter=$pricePerLiter, amount=$amount, driverId=$driverId, date=$date, id=$id)"
     }
@@ -26,7 +29,9 @@ open class FuelRefill(
 data class FuelStat(
     var amount: BigDecimal,
     var totalPrice: BigDecimal
-)
+) {
+    val avgPricePerLiter get() = (totalPrice / amount).currencyScale()
+}
 
 enum class FuelType(@JsonValue val type: String) {
     P98("98"),

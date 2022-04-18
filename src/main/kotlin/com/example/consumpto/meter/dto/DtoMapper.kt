@@ -1,7 +1,6 @@
 package com.example.consumpto.meter.dto
 
 import com.example.consumpto.meter.capitalize
-import com.example.consumpto.meter.currencyScale
 import com.example.consumpto.meter.domain.FuelRefill
 import com.example.consumpto.meter.domain.FuelStat
 import com.example.consumpto.meter.domain.FuelType
@@ -39,7 +38,7 @@ class DtoMapper {
             refill.fuelType,
             refill.amount,
             refill.pricePerLiter,
-            (refill.pricePerLiter * refill.amount).currencyScale()
+            refill.cost
         )
     }
 
@@ -51,7 +50,7 @@ class DtoMapper {
                 StatDTO(
                     it.key,
                     stat.amount,
-                    (stat.totalPrice / stat.amount).currencyScale(),
+                    stat.avgPricePerLiter,
                     stat.totalPrice
                 )
             }

@@ -20,7 +20,7 @@ class ConsumptoMeterService(
         return getMonthlyMap(
             sortedEntities = allRefills,
             newAcc = { BigDecimal.ZERO },
-            addToAcc = { acc, entity -> acc.add(entity.getCost()) }
+            addToAcc = { acc, entity -> acc.add(entity.cost) }
         )
     }
 
@@ -95,10 +95,8 @@ class ConsumptoMeterService(
         val stat = this.getOrPut(refill.fuelType) { FuelStat(BigDecimal.ZERO, BigDecimal.ZERO) }
 
         stat.amount += refill.amount
-        stat.totalPrice += refill.getCost()
+        stat.totalPrice += refill.cost
 
         return this
     }
-
-    private fun FuelRefill.getCost() = (this.amount * this.pricePerLiter).currencyScale()
 }

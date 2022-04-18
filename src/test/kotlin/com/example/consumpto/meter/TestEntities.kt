@@ -7,14 +7,28 @@ import java.time.LocalDate
 
 class TestFuelRefill(
     fuelType: FuelType,
-    pricePerLiter: Double,
-    amount: Double,
-    date: LocalDate,
+    pricePerLiter: BigDecimal,
+    amount: BigDecimal,
     driverId: Long,
+    date: LocalDate
 ) : FuelRefill(
     fuelType,
-    BigDecimal.valueOf(pricePerLiter),
-    BigDecimal.valueOf(amount),
+    pricePerLiter,
+    amount,
     driverId,
     date
-)
+) {
+    constructor(
+        fuelType: FuelType,
+        pricePerLiter: Double,
+        amount: Double,
+        driverId: Long,
+        date: LocalDate
+    ) : this(
+        fuelType,
+        BigDecimal.valueOf(pricePerLiter),
+        BigDecimal.valueOf(amount),
+        driverId,
+        date
+    )
+}
