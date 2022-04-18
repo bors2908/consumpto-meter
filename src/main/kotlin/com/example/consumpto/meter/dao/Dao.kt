@@ -1,6 +1,6 @@
 package com.example.consumpto.meter.dao
 
-import com.example.consumpto.meter.entities.Entity
+import com.example.consumpto.meter.domain.Entity
 
 interface Dao<T: Entity> {
     fun getAll(): Collection<T>

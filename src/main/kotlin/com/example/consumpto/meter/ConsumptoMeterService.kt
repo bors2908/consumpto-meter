@@ -1,10 +1,10 @@
 package com.example.consumpto.meter
 
 import com.example.consumpto.meter.dao.FuelRefillDao
-import com.example.consumpto.meter.entities.Entity
-import com.example.consumpto.meter.entities.FuelRefill
-import com.example.consumpto.meter.entities.FuelStat
-import com.example.consumpto.meter.entities.FuelType
+import com.example.consumpto.meter.domain.Entity
+import com.example.consumpto.meter.domain.FuelRefill
+import com.example.consumpto.meter.domain.FuelStat
+import com.example.consumpto.meter.domain.FuelType
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.format.TextStyle

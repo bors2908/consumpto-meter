@@ -1,4 +1,4 @@
-package com.example.consumpto.meter.controller
+package com.example.consumpto.meter.rest
 
 import com.example.consumpto.meter.ConsumptoMeterService
 import com.example.consumpto.meter.dto.AddRefillDTO

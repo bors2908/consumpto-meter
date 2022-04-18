@@ -1,4 +1,4 @@
-package com.example.consumpto.meter.entities
+package com.example.consumpto.meter.domain
 
 import com.fasterxml.jackson.annotation.JsonValue
 import java.math.BigDecimal

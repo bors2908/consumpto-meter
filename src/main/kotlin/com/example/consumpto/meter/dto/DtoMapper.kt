@@ -1,9 +1,9 @@
 package com.example.consumpto.meter.dto
 
 import com.example.consumpto.meter.currencyScale
-import com.example.consumpto.meter.entities.FuelRefill
-import com.example.consumpto.meter.entities.FuelStat
-import com.example.consumpto.meter.entities.FuelType
+import com.example.consumpto.meter.domain.FuelRefill
+import com.example.consumpto.meter.domain.FuelStat
+import com.example.consumpto.meter.domain.FuelType
 import java.math.BigDecimal
 import org.springframework.stereotype.Component
 

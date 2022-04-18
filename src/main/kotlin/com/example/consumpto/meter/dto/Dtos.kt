@@ -1,6 +1,6 @@
 package com.example.consumpto.meter.dto
 
-import com.example.consumpto.meter.entities.FuelType
+import com.example.consumpto.meter.domain.FuelType
 import java.math.BigDecimal
 import java.time.LocalDate
 import javax.validation.constraints.DecimalMin
