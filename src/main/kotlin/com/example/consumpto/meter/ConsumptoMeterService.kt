@@ -40,11 +40,7 @@ class ConsumptoMeterService(
 
         return getMonthlyMap(
             sortedEntities = allRefills,
-            newAcc = {
-                FuelType.values()
-                    .associateWith { FuelStat(BigDecimal.ZERO, BigDecimal.ZERO) }
-                    .toMutableMap()
-            },
+            newAcc = { mutableMapOf() },
             addToAcc = { acc, entity -> acc.processRefillAndReturnMap(entity) }
         )
     }
@@ -103,6 +99,10 @@ class ConsumptoMeterService(
     }
 
     private fun MutableMap<FuelType, FuelStat>.processRefillAndReturnMap(refill: FuelRefill): MutableMap<FuelType, FuelStat> {
+        if (!this.contains(refill.fuelType)) {
+            this[refill.fuelType] = FuelStat(BigDecimal.ZERO, BigDecimal.ZERO)
+        }
+
         val stat = this.getValue(refill.fuelType)
 
         stat.amount += refill.amount

@@ -4,14 +4,12 @@ import com.example.consumpto.meter.currencyScale
 import com.example.consumpto.meter.domain.FuelRefill
 import com.example.consumpto.meter.domain.FuelStat
 import com.example.consumpto.meter.domain.FuelType
-import java.math.BigDecimal
 import org.springframework.stereotype.Component
 
 @Component
 class DtoMapper {
     fun statToDto(stats: Map<FuelType, FuelStat>): List<StatDTO> {
         return stats
-            .filter { it.value.amount != BigDecimal.ZERO }
             .map {
             val stat = it.value
 
