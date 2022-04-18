@@ -19,4 +19,6 @@ interface Dao<T: Entity> {
     fun update(@Valid t: T): Boolean
 
     fun delete(id: Long): Boolean
+
+    fun deleteAll()
 }

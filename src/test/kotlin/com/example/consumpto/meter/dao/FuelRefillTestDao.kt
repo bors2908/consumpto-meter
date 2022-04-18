@@ -35,7 +35,7 @@ class FuelRefillTestDao: FuelRefillDao() {
         return storage.delete(id)
     }
 
-    fun deleteAll() {
+    override fun deleteAll() {
         return storage.deleteAll()
     }
 }

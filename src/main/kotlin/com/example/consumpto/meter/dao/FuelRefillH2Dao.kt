@@ -13,13 +13,13 @@ import org.springframework.stereotype.Component
 @Component
 class FuelRefillH2Dao(private val jdbcTemplate: JdbcTemplate) : FuelRefillDao() {
     companion object {
-        private const val REFILLS_TABLE_NAME = "refills"
-        private const val ID_COLUMN_NAME = "id"
-        private const val FUEL_TYPE_COLUMN_NAME = "fuel_type"
-        private const val PRICE_PER_LITER_COLUMN_NAME = "price_per_liter"
-        private const val AMOUNT_COLUMN_NAME = "amount"
-        private const val DRIVER_ID_COLUMN_NAME = "driver_id"
-        private const val DATE_COLUMN_NAME = "date"
+        const val REFILLS_TABLE_NAME = "refills"
+        const val ID_COLUMN_NAME = "id"
+        const val FUEL_TYPE_COLUMN_NAME = "fuel_type"
+        const val PRICE_PER_LITER_COLUMN_NAME = "price_per_liter"
+        const val AMOUNT_COLUMN_NAME = "amount"
+        const val DRIVER_ID_COLUMN_NAME = "driver_id"
+        const val DATE_COLUMN_NAME = "date"
 
         // I thought about separating the table with fuel names, prices and respective dates to reduce data redundancy,
         // but that would require separating fuel pricing input to another endpoint (which contradicts with app
@@ -101,6 +101,10 @@ class FuelRefillH2Dao(private val jdbcTemplate: JdbcTemplate) : FuelRefillDao() 
         )
 
         return processSingleUpdateResult(deleted, "$deleted rows were deleted instead of one.")
+    }
+
+    override fun deleteAll() {
+        jdbcTemplate.update("TRUNCATE TABLE $REFILLS_TABLE_NAME;")
     }
 
     private fun processSingleUpdateResult(updated: Int, message: String): Boolean {

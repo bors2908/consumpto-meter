@@ -8,6 +8,7 @@ import com.example.consumpto.meter.getRandomFuelAmount
 import com.example.consumpto.meter.getRandomFuelPrice
 import com.example.consumpto.meter.getRandomFuelType
 import com.example.consumpto.meter.getRandomLocalDate
+import com.example.consumpto.meter.getRandomizedRefill
 import java.time.YearMonth
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -18,15 +19,7 @@ class ConsumptoMeterServiceUnitTest {
     private val testDao = FuelRefillTestDao()
     private val meterService = ConsumptoMeterService(testDao)
 
-    private fun getTestFuelRefillsData() = (1..1000).map {
-        TestFuelRefill(
-            getRandomFuelType(),
-            getRandomFuelPrice(),
-            getRandomFuelAmount(),
-            getRandomDriver(),
-            getRandomLocalDate()
-        )
-    }
+    private fun getTestFuelRefillsData() = (1..300).map { getRandomizedRefill() }
 
     @AfterEach
     fun tearDown() {
@@ -103,6 +96,14 @@ class ConsumptoMeterServiceUnitTest {
 
     @Test
     fun addInvalidRefills() {
-
+        meterService.addRefills(listOf(
+            TestFuelRefill(
+                getRandomFuelType(),
+                getRandomFuelPrice().negate(),
+                getRandomFuelAmount().negate(),
+                - getRandomDriver(),
+                getRandomLocalDate()
+            )
+        ))
     }
 }
