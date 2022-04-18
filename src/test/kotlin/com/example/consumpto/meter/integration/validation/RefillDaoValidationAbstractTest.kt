@@ -12,8 +12,8 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-abstract class RefillDaoValidationAbstractTest {
-    abstract var fuelRefillDao: FuelRefillDao
+abstract class RefillDaoValidationAbstractTest <T: FuelRefillDao> {
+    abstract var fuelRefillDao: T
 
     @AfterEach
     fun tearDown() {

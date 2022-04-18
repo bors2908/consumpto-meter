@@ -1,7 +1,7 @@
 package com.example.consumpto.meter.integration.validation
 
 import com.example.consumpto.meter.TestFuelRefill
-import com.example.consumpto.meter.dao.FuelRefillDao
+import com.example.consumpto.meter.dao.FuelRefillH2Dao
 import com.example.consumpto.meter.dao.FuelRefillH2Dao.Companion.AMOUNT_COLUMN_NAME
 import com.example.consumpto.meter.dao.FuelRefillH2Dao.Companion.ID_COLUMN_NAME
 import com.example.consumpto.meter.dao.FuelRefillH2Dao.Companion.PRICE_PER_LITER_COLUMN_NAME
@@ -20,9 +20,9 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
 
 @SpringBootTest
-class RefillDaoValidationH2Test : RefillDaoValidationAbstractTest() {
+class RefillDaoValidationH2Test : RefillDaoValidationAbstractTest<FuelRefillH2Dao>() {
     @Autowired
-    override lateinit var fuelRefillDao: FuelRefillDao
+    override lateinit var fuelRefillDao: FuelRefillH2Dao
 
     @Autowired
     lateinit var jdbcTemplate: JdbcTemplate
@@ -42,6 +42,23 @@ class RefillDaoValidationH2Test : RefillDaoValidationAbstractTest() {
         breakDbData()
 
         assertThrows<ConstraintViolationException> { fuelRefillDao.getAll() }
+    }
+
+    @Test
+    fun testBrokenDbDataSortedRequest() {
+        fuelRefillDao.addAll(listOf(
+            TestFuelRefill(
+                getRandomFuelType(),
+                getRandomFuelPrice(),
+                getRandomFuelAmount(),
+                getRandomDriver(),
+                getRandomLocalDate()
+            )
+        ))
+
+        breakDbData()
+
+        assertThrows<ConstraintViolationException> { fuelRefillDao.getAllRefillsSorted() }
     }
 
     private fun breakDbData() {
