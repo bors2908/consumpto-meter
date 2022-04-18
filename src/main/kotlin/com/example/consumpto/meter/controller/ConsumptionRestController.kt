@@ -6,6 +6,9 @@ import com.example.consumpto.meter.dto.DtoMapper
 import com.example.consumpto.meter.dto.RefillDTO
 import com.example.consumpto.meter.dto.StatDTO
 import java.math.BigDecimal
+import javax.validation.Valid
+import javax.validation.constraints.Positive
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 
+@Validated
 @RestController
 @RequestMapping("/consumption")
 class ConsumptionRestController(
@@ -21,26 +25,26 @@ class ConsumptionRestController(
 ) {
     @PostMapping(path = ["/addRefills"])
     @ResponseBody
-    fun addRefills(@RequestBody addRefills: List<AddRefillDTO>): List<Long> {
+    fun addRefills(@RequestBody @Valid addRefills: List<@Valid AddRefillDTO>): List<Long> {
         return service.addRefills(addRefills.map { mapper.addRefillDtoToRefill(it) })
     }
 
     @GetMapping(path = ["/monthlyAmount"])
     @ResponseBody
-    fun getMonthlyAmount(@RequestBody driverId: Long? = null): Map<String, BigDecimal> {
+    fun getMonthlyAmount(@RequestBody @Valid @Positive driverId: Long? = null): Map<String, BigDecimal> {
         return service.getCostByMonth(driverId)
     }
 
     @GetMapping(path = ["/monthlyRefills"])
     @ResponseBody
-    fun getMonthlyRefills(@RequestBody driverId: Long? = null): Map<String, List<RefillDTO>> {
+    fun getMonthlyRefills(@RequestBody @Valid @Positive driverId: Long? = null): Map<String, List<RefillDTO>> {
         return service.getRefillsByMonth(driverId)
             .mapValues { it.value.map { e -> mapper.refillToDto(e) } }
     }
 
     @GetMapping(path = ["/monthlyStats"])
     @ResponseBody
-    fun getMonthlyStats(@RequestBody driverId: Long? = null): Map<String, List<StatDTO>> {
+    fun getMonthlyStats(@RequestBody @Valid @Positive driverId: Long? = null): Map<String, List<StatDTO>> {
         return service.getStatsByMonth(driverId).mapValues { mapper.statToDto(it.value) }
     }
 }

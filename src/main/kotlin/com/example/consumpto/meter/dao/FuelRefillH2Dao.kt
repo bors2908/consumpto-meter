@@ -21,6 +21,10 @@ class FuelRefillH2Dao(private val jdbcTemplate: JdbcTemplate) : FuelRefillDao() 
         private const val DRIVER_ID_COLUMN_NAME = "driver_id"
         private const val DATE_COLUMN_NAME = "date"
 
+        // I thought about separating the table with fuel names, prices and respective dates to reduce data redundancy,
+        // but that would require separating fuel pricing input to another endpoint (which contradicts with app
+        // specification) or addition of ineffective fuel types parsing from DB / memory caching each time a refill
+        // is added.
         private const val CREATE_SQL_SCRIPT = "CREATE TABLE $REFILLS_TABLE_NAME (" +
                 "   $ID_COLUMN_NAME IDENTITY, \n" +
                 "   $FUEL_TYPE_COLUMN_NAME VARCHAR(4) NOT NULL, \n" +
@@ -44,7 +48,7 @@ class FuelRefillH2Dao(private val jdbcTemplate: JdbcTemplate) : FuelRefillDao() 
             "SELECT * " +
                     "FROM $REFILLS_TABLE_NAME " +
                     if (driverId != null) "WHERE $DRIVER_ID_COLUMN_NAME = $driverId" else "" +
-                    "ORDER BY $DATE_COLUMN_NAME;",
+                            "ORDER BY $DATE_COLUMN_NAME;",
             RefillRowMapper()
         )
     }
