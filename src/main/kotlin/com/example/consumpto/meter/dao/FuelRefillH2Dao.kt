@@ -47,8 +47,8 @@ class FuelRefillH2Dao(private val jdbcTemplate: JdbcTemplate) : FuelRefillDao() 
         return jdbcTemplate.query(
             "SELECT * " +
                     "FROM $REFILLS_TABLE_NAME " +
-                    if (driverId != null) "WHERE $DRIVER_ID_COLUMN_NAME = $driverId" else "" +
-                            "ORDER BY $DATE_COLUMN_NAME;",
+                    if (driverId != null) "WHERE $DRIVER_ID_COLUMN_NAME = $driverId " else "" +
+                    "ORDER BY $DATE_COLUMN_NAME;",
             RefillRowMapper()
         )
     }
