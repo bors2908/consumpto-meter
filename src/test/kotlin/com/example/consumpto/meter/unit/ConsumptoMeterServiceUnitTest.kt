@@ -1,34 +1,31 @@
 package com.example.consumpto.meter.unit
 
 import com.example.consumpto.meter.ConsumptoMeterService
-import com.example.consumpto.meter.dao.FuelRefillTestDao
 import com.example.consumpto.meter.TestFuelRefill
-import com.example.consumpto.meter.domain.FuelType.D
-import com.example.consumpto.meter.domain.FuelType.P95
-import com.example.consumpto.meter.domain.FuelType.P98
-import java.time.LocalDate
+import com.example.consumpto.meter.dao.FuelRefillTestDao
+import com.example.consumpto.meter.getRandomDriver
+import com.example.consumpto.meter.getRandomFuelAmount
+import com.example.consumpto.meter.getRandomFuelPrice
+import com.example.consumpto.meter.getRandomFuelType
+import com.example.consumpto.meter.getRandomLocalDate
+import java.time.YearMonth
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class ConsumptoMeterServiceUnitTest {
     private val testDao = FuelRefillTestDao()
     private val meterService = ConsumptoMeterService(testDao)
 
-    @BeforeEach
-    fun setUp() {
-        testDao.addAll(listOf(
-            TestFuelRefill(P95, 1.8, 50.0, LocalDate.now(), 1),
-            TestFuelRefill(P98, 1.8, 50.0, LocalDate.now().minusMonths(1), 2),
-            TestFuelRefill(D, 1.8, 50.0, LocalDate.now().minusMonths(6), 3),
-            TestFuelRefill(P95, 1.8, 50.0, LocalDate.now().minusYears(1), 4),
-            TestFuelRefill(P95, 1.8, 50.0, LocalDate.now().minusYears(1).minusMonths(1), 5),
-            TestFuelRefill(P95, 1.8, 50.0, LocalDate.now(), 1),
-            TestFuelRefill(P98, 1.8, 50.0, LocalDate.now().minusMonths(1), 2),
-            TestFuelRefill(D, 1.8, 50.0, LocalDate.now().minusMonths(6), 3),
-            TestFuelRefill(P95, 1.8, 50.0, LocalDate.now().minusYears(1), 4),
-            TestFuelRefill(P95, 1.8, 50.0, LocalDate.now().minusYears(1).minusMonths(1), 5),
-        ))
+    private fun getTestFuelRefillsData() = (1..1000).map {
+        TestFuelRefill(
+            getRandomFuelType(),
+            getRandomFuelPrice(),
+            getRandomFuelAmount(),
+            getRandomDriver(),
+            getRandomLocalDate()
+        )
     }
 
     @AfterEach
@@ -38,21 +35,74 @@ class ConsumptoMeterServiceUnitTest {
 
     @Test
     fun testGetTotalCost() {
-        meterService.getCostByMonth().forEach { println(it) }
+        val testData = getTestFuelRefillsData()
+
+        val sum = testData
+            .map { it.cost }
+            .reduce { acc, subSum -> acc + subSum }
+
+        val months = testData
+            .map { YearMonth.of(it.date.year, it.date.month) }
+            .distinct()
+
+        meterService.addRefills(testData)
+
+        val costByMonth = meterService.getCostByMonth()
+
+        assertTrue(costByMonth.keys.containsAll(months))
+
+        val resultingSum = costByMonth.values.reduce { acc, subSum -> acc + subSum }
+
+        assertEquals(sum, resultingSum)
     }
 
     @Test
     fun testGetStats() {
-        meterService.getStatsByMonth().forEach { println(it) }
+        val testData = getTestFuelRefillsData()
+
+        val sum = testData
+            .map { it.cost }
+            .reduce { acc, subSum -> acc + subSum }
+
+        val months = testData
+            .map { YearMonth.of(it.date.year, it.date.month) }
+            .distinct()
+
+        meterService.addRefills(testData)
+
+        val statsByMonth = meterService.getStatsByMonth()
+
+        assertTrue(statsByMonth.keys.containsAll(months))
+
+        val resultingSum = statsByMonth.values
+            .flatMap { it.values }
+            .map { it.totalPrice }
+            .reduce { acc, subSum -> acc + subSum }
+
+        assertEquals(sum, resultingSum)
     }
 
     @Test
     fun testGetRefills() {
-        meterService.getRefillsByMonth().forEach{ println(it) }
+        val testData = getTestFuelRefillsData()
+
+        val months = testData
+            .map { YearMonth.of(it.date.year, it.date.month) }
+            .distinct()
+
+        meterService.addRefills(testData)
+
+        val refillsByMonth = meterService.getRefillsByMonth()
+
+        assertTrue(refillsByMonth.keys.containsAll(months))
+
+        val refills = refillsByMonth.values.flatten()
+
+        assertTrue(refills.containsAll(testData))
     }
 
     @Test
-    fun addRefills() {
+    fun addInvalidRefills() {
 
     }
 }
