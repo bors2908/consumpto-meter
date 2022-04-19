@@ -12,6 +12,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
+// There should be more DAO tests (delete, update), but I've had limited time-constraints.
 abstract class RefillDaoValidationAbstractTest <T: FuelRefillDao> {
     abstract var fuelRefillDao: T
 

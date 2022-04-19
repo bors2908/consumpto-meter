@@ -47,6 +47,7 @@ class ConsumptoMeterService(
         return refillDao.addAll(refills)
     }
 
+    // Processes a list of entities with date and groups it by month.
     private inline fun <reified T, reified R : Entity> getMonthlyMap(
         sortedEntities: List<R>,
         newAcc: () -> T,
