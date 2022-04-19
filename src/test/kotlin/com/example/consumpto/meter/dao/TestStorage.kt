@@ -2,6 +2,9 @@ package com.example.consumpto.meter.dao
 
 import com.example.consumpto.meter.domain.Entity
 import java.security.InvalidParameterException
+import mu.KotlinLogging
+
+private val log = KotlinLogging.logger { }
 
 class TestStorage<T : Entity> {
     private var storage = mutableMapOf<Long, T>()
@@ -40,6 +43,8 @@ class TestStorage<T : Entity> {
     }
 
     fun deleteAll() {
+        log.warn { "Clearing storage." }
+
         storage = mutableMapOf()
     }
 }

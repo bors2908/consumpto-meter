@@ -5,10 +5,13 @@ import com.example.consumpto.meter.domain.FuelType
 import java.math.BigDecimal
 import java.sql.ResultSet
 import java.sql.SQLDataException
+import mu.KotlinLogging
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert
 import org.springframework.stereotype.Component
+
+private val log = KotlinLogging.logger { }
 
 @Component
 class FuelRefillH2Dao(private val jdbcTemplate: JdbcTemplate) : FuelRefillDao() {
@@ -41,6 +44,8 @@ class FuelRefillH2Dao(private val jdbcTemplate: JdbcTemplate) : FuelRefillDao() 
 
     init {
         jdbcTemplate.update(CREATE_SQL_SCRIPT)
+
+        log.info { "Table $REFILLS_TABLE_NAME created." }
     }
 
     override fun getAllRefillsSorted(driverId: Long?): List<FuelRefill> {
@@ -105,6 +110,8 @@ class FuelRefillH2Dao(private val jdbcTemplate: JdbcTemplate) : FuelRefillDao() 
 
     override fun deleteAll() {
         jdbcTemplate.update("TRUNCATE TABLE $REFILLS_TABLE_NAME;")
+
+        log.warn { "Truncating table $REFILLS_TABLE_NAME." }
     }
 
     private fun processSingleUpdateResult(updated: Int, message: String): Boolean {
