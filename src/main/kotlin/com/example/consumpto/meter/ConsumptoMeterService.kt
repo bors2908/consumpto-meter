@@ -6,7 +6,6 @@ import com.example.consumpto.meter.domain.FuelRefill
 import com.example.consumpto.meter.domain.FuelStat
 import com.example.consumpto.meter.domain.FuelType
 import java.math.BigDecimal
-import java.time.LocalDate
 import java.time.YearMonth
 import org.springframework.stereotype.Service
 
@@ -82,8 +81,6 @@ class ConsumptoMeterService(
 
         return monthly
     }
-
-    private fun LocalDate.toYearMonth() = YearMonth.of(this.year, this.month)
 
     private fun <E> MutableList<E>.addAndReturnList(element: E): MutableList<E> {
         this.add(element)
