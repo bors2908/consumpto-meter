@@ -1,8 +1,8 @@
 package com.example.consumpto.meter.unit
 
 import com.example.consumpto.meter.ConsumptoMeterService
-import com.example.consumpto.meter.TestFuelRefill
 import com.example.consumpto.meter.dao.FuelRefillTestDao
+import com.example.consumpto.meter.domain.FuelRefill
 import com.example.consumpto.meter.getRandomDriver
 import com.example.consumpto.meter.getRandomFuelAmount
 import com.example.consumpto.meter.getRandomFuelPrice
@@ -59,7 +59,7 @@ class ConsumptoMeterServiceUnitTest {
     @Test
     fun addInvalidRefills() {
         meterService.addRefills(listOf(
-            TestFuelRefill(
+            FuelRefill(
                 getRandomFuelType(),
                 getRandomFuelPrice().negate(),
                 getRandomFuelAmount().negate(),

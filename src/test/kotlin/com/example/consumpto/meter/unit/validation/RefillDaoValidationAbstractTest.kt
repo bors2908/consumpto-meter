@@ -1,7 +1,7 @@
 package com.example.consumpto.meter.unit.validation
 
-import com.example.consumpto.meter.TestFuelRefill
 import com.example.consumpto.meter.dao.FuelRefillDao
+import com.example.consumpto.meter.domain.FuelRefill
 import com.example.consumpto.meter.getRandomDriver
 import com.example.consumpto.meter.getRandomFuelAmount
 import com.example.consumpto.meter.getRandomFuelPrice
@@ -25,7 +25,7 @@ abstract class RefillDaoValidationAbstractTest <T: FuelRefillDao> {
     fun addNegativeDriverId() {
         assertThrows<ConstraintViolationException> {
             fuelRefillDao.addAll(listOf(
-                TestFuelRefill(
+                FuelRefill(
                     getRandomFuelType(),
                     getRandomFuelPrice(),
                     getRandomFuelAmount(),
@@ -40,7 +40,7 @@ abstract class RefillDaoValidationAbstractTest <T: FuelRefillDao> {
     fun addNegativePrice() {
         assertThrows<ConstraintViolationException> {
             fuelRefillDao.addAll(listOf(
-                TestFuelRefill(
+                FuelRefill(
                     getRandomFuelType(),
                     getRandomFuelPrice().negate(),
                     getRandomFuelAmount(),
@@ -55,7 +55,7 @@ abstract class RefillDaoValidationAbstractTest <T: FuelRefillDao> {
     fun addWrongAmountFormat() {
         assertThrows<ConstraintViolationException> {
             fuelRefillDao.addAll(listOf(
-                TestFuelRefill(
+                FuelRefill(
                     getRandomFuelType(),
                     getRandomFuelPrice(),
                     getRandomFuelAmount().setScale(3),

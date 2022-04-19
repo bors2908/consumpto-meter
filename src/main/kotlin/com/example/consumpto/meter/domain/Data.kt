@@ -21,26 +21,33 @@ open class FuelRefill(
     val pricePerLiter: BigDecimal,
 
     @field:DecimalMin(value = "0.0", inclusive = false, message = "Fuel amount must be positive.")
-    @field:Digits(integer=12, fraction=2)
+    @field:Digits(integer = 12, fraction = 2)
     val amount: BigDecimal,
 
     @field:Positive
     val driverId: Long,
 
     override val date: LocalDate,
-    ) : Entity {
+) : Entity {
     override var id: Long? = null
 
     val cost get() = (this.amount * this.pricePerLiter).currencyScale()
 
     override fun toString(): String {
-        return "FuelRefill(fuelType=$fuelType, pricePerLiter=$pricePerLiter, amount=$amount, driverId=$driverId, date=$date, id=$id)"
+        return "FuelRefill(" +
+                "fuelType=$fuelType, " +
+                "pricePerLiter=$pricePerLiter, " +
+                "amount=$amount, " +
+                "driverId=$driverId, " +
+                "date=$date, " +
+                "id=$id" +
+                ")"
     }
 }
 
 data class FuelStat(
     var amount: BigDecimal,
-    var totalPrice: BigDecimal
+    var totalPrice: BigDecimal,
 ) {
     val avgPricePerLiter get() = (totalPrice / amount).currencyScale()
 }

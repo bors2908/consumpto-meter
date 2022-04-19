@@ -152,5 +152,3 @@ class FuelRefillH2Dao(private val jdbcTemplate: JdbcTemplate) : FuelRefillDao() 
         }
     }
 }
-
-

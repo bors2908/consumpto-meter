@@ -1,5 +1,6 @@
 package com.example.consumpto.meter
 
+import com.example.consumpto.meter.domain.FuelRefill
 import com.example.consumpto.meter.domain.FuelType
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -17,7 +18,7 @@ fun getRandomLocalDate(): LocalDate = LocalDate.of(
     random.nextInt(1, 28)
 )
 
-fun getRandomizedRefill() = TestFuelRefill(
+fun getRandomizedRefill() = FuelRefill(
     getRandomFuelType(),
     getRandomFuelPrice(),
     getRandomFuelAmount(),

@@ -24,7 +24,8 @@ class DtoMapper {
     }
 
     fun mapRefills(map: Map<YearMonth, List<FuelRefill>>): Map<String, List<RefillDto>> {
-        return map.entries.associate { it.key.toYearMonthLocalizedString() to it.value.map { refill -> refillToDto(refill) } }
+        return map.entries
+            .associate { it.key.toYearMonthLocalizedString() to it.value.map { refill -> refillToDto(refill) } }
     }
 
     fun mapStats(map: Map<YearMonth, Map<FuelType, FuelStat>>): Map<String, List<StatDto>> {

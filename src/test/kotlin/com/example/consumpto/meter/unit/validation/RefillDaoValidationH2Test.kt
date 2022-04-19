@@ -1,11 +1,11 @@
 package com.example.consumpto.meter.unit.validation
 
-import com.example.consumpto.meter.TestFuelRefill
 import com.example.consumpto.meter.dao.FuelRefillH2Dao
 import com.example.consumpto.meter.dao.FuelRefillH2Dao.Companion.AMOUNT_COLUMN_NAME
 import com.example.consumpto.meter.dao.FuelRefillH2Dao.Companion.ID_COLUMN_NAME
 import com.example.consumpto.meter.dao.FuelRefillH2Dao.Companion.PRICE_PER_LITER_COLUMN_NAME
 import com.example.consumpto.meter.dao.FuelRefillH2Dao.Companion.REFILLS_TABLE_NAME
+import com.example.consumpto.meter.domain.FuelRefill
 import com.example.consumpto.meter.getRandomDriver
 import com.example.consumpto.meter.getRandomFuelAmount
 import com.example.consumpto.meter.getRandomFuelPrice
@@ -30,7 +30,7 @@ class RefillDaoValidationH2Test : RefillDaoValidationAbstractTest<FuelRefillH2Da
     @Test
     fun testBrokenDbData() {
         fuelRefillDao.addAll(listOf(
-            TestFuelRefill(
+            FuelRefill(
                 getRandomFuelType(),
                 getRandomFuelPrice(),
                 getRandomFuelAmount(),
@@ -47,7 +47,7 @@ class RefillDaoValidationH2Test : RefillDaoValidationAbstractTest<FuelRefillH2Da
     @Test
     fun testBrokenDbDataSortedRequest() {
         fuelRefillDao.addAll(listOf(
-            TestFuelRefill(
+            FuelRefill(
                 getRandomFuelType(),
                 getRandomFuelPrice(),
                 getRandomFuelAmount(),
@@ -71,6 +71,5 @@ class RefillDaoValidationH2Test : RefillDaoValidationAbstractTest<FuelRefillH2Da
             BigDecimal(-1.0),
             BigDecimal(-1.0)
         )
-
     }
 }
