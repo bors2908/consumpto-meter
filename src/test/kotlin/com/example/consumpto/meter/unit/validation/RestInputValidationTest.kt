@@ -1,18 +1,22 @@
-package com.example.consumpto.meter.integration.validation
+package com.example.consumpto.meter.unit.validation
 
 import com.example.consumpto.meter.ConsumptoMeterService
+import com.example.consumpto.meter.domain.FuelType
 import com.example.consumpto.meter.dto.DtoMapper
+import com.example.consumpto.meter.getRandomDriver
 import com.example.consumpto.meter.getRandomFuelAmount
 import com.example.consumpto.meter.getRandomFuelPrice
+import com.example.consumpto.meter.getRandomFuelType
+import com.example.consumpto.meter.getRandomLocalDate
 import com.example.consumpto.meter.getRandomizedRefill
-import com.example.consumpto.meter.integration.getJsonRequestData
-import com.example.consumpto.meter.integration.getRequestJsonObject
 import com.example.consumpto.meter.rest.ADD_REFILLS_ENDPOINT
 import com.example.consumpto.meter.rest.CONSUMPTION_URL_PATH
 import com.example.consumpto.meter.rest.ConsumptionRestController
 import com.example.consumpto.meter.rest.MONTHLY_AMOUNT_ENDPOINT
 import com.example.consumpto.meter.rest.MONTHLY_REFILLS_ENDPOINT
 import com.example.consumpto.meter.rest.MONTHLY_STATS_ENDPOINT
+import java.math.BigDecimal
+import java.time.LocalDate
 import org.hamcrest.Matchers.containsString
 import org.json.JSONArray
 import org.json.JSONObject
@@ -206,4 +210,26 @@ class RestInputValidationTest {
             .andExpect(MockMvcResultMatchers.status().isBadRequest)
             .andExpect(MockMvcResultMatchers.content().string(containsString("must be greater than 0")))
     }
+
+    fun getJsonRequestData(): JSONArray {
+        val requestData = JSONArray((0..10).map {
+            getRequestJsonObject()
+        })
+        return requestData
+    }
+
+    // Intentional avoidance of Jackson DTO mapping.
+    fun getRequestJsonObject(
+        fuelType: FuelType = getRandomFuelType(),
+        pricePerLiter: BigDecimal = getRandomFuelPrice(),
+        amount: BigDecimal = getRandomFuelAmount(),
+        date: LocalDate = getRandomLocalDate(),
+        driverId: Long = getRandomDriver(),
+    ) = JSONObject(mapOf(
+        "fuelType" to fuelType.type,
+        "pricePerLiter" to pricePerLiter,
+        "amount" to amount,
+        "driverId" to driverId,
+        "date" to date
+    ))
 }

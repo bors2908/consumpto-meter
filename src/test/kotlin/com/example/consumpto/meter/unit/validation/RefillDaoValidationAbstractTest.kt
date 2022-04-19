@@ -1,4 +1,4 @@
-package com.example.consumpto.meter.integration.validation
+package com.example.consumpto.meter.unit.validation
 
 import com.example.consumpto.meter.TestFuelRefill
 import com.example.consumpto.meter.dao.FuelRefillDao
