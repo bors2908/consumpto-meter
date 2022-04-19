@@ -1,5 +1,6 @@
 # consumpto-meter
-Demo project. Done mostly to be example of my understanding of how it should be "by-the-book". 
+Demo project. An example of my understanding of how it should be "by-the-book". 
+
 Allows to register fuel refills from multiple drivers and receive detailed stats about monthly fuel consumption.
 
 Mostly finished. Requires some polish. 
