@@ -28,70 +28,32 @@ class ConsumptoMeterServiceUnitTest {
 
     @Test
     fun testGetTotalCost() {
-        val testData = getTestFuelRefillsData()
+        checkTotalCost()
+    }
 
-        val sum = testData
-            .map { it.cost }
-            .reduce { acc, subSum -> acc + subSum }
-
-        val months = testData
-            .map { YearMonth.of(it.date.year, it.date.month) }
-            .distinct()
-
-        meterService.addRefills(testData)
-
-        val costByMonth = meterService.getCostByMonth()
-
-        assertTrue(costByMonth.keys.containsAll(months))
-
-        val resultingSum = costByMonth.values.reduce { acc, subSum -> acc + subSum }
-
-        assertEquals(sum, resultingSum)
+    @Test
+    fun testGetTotalCostDriverId() {
+        checkTotalCost(getRandomDriver())
     }
 
     @Test
     fun testGetStats() {
-        val testData = getTestFuelRefillsData()
+        checkGetStats()
+    }
 
-        val sum = testData
-            .map { it.cost }
-            .reduce { acc, subSum -> acc + subSum }
-
-        val months = testData
-            .map { YearMonth.of(it.date.year, it.date.month) }
-            .distinct()
-
-        meterService.addRefills(testData)
-
-        val statsByMonth = meterService.getStatsByMonth()
-
-        assertTrue(statsByMonth.keys.containsAll(months))
-
-        val resultingSum = statsByMonth.values
-            .flatMap { it.values }
-            .map { it.totalPrice }
-            .reduce { acc, subSum -> acc + subSum }
-
-        assertEquals(sum, resultingSum)
+    @Test
+    fun testGetStatsDriverId() {
+        checkGetStats(getRandomDriver())
     }
 
     @Test
     fun testGetRefills() {
-        val testData = getTestFuelRefillsData()
+        checkGetRefills()
+    }
 
-        val months = testData
-            .map { YearMonth.of(it.date.year, it.date.month) }
-            .distinct()
-
-        meterService.addRefills(testData)
-
-        val refillsByMonth = meterService.getRefillsByMonth()
-
-        assertTrue(refillsByMonth.keys.containsAll(months))
-
-        val refills = refillsByMonth.values.flatten()
-
-        assertTrue(refills.containsAll(testData))
+    @Test
+    fun testGetRefillsDriverId() {
+        checkGetRefills(getRandomDriver())
     }
 
     @Test
@@ -105,5 +67,76 @@ class ConsumptoMeterServiceUnitTest {
                 getRandomLocalDate()
             )
         ))
+    }
+
+    private fun checkTotalCost(driverId: Long? = null) {
+        val testData = getTestFuelRefillsData()
+
+        val filteredTestData = testData.filter { driverId == null || it.driverId == driverId }
+
+        val sum = filteredTestData
+            .map { it.cost }
+            .reduce { acc, subSum -> acc + subSum }
+
+        val months = filteredTestData
+            .map { YearMonth.of(it.date.year, it.date.month) }
+            .distinct()
+
+        meterService.addRefills(testData)
+
+        val costByMonth = meterService.getCostByMonth(driverId)
+
+        assertTrue(costByMonth.keys.containsAll(months))
+
+        val resultingSum = costByMonth.values.reduce { acc, subSum -> acc + subSum }
+
+        assertEquals(sum, resultingSum)
+    }
+
+    private fun checkGetStats(driverId: Long? = null) {
+        val testData = getTestFuelRefillsData()
+
+        val filteredTestData = testData.filter { driverId == null || it.driverId == driverId }
+
+        val sum = filteredTestData
+            .map { it.cost }
+            .reduce { acc, subSum -> acc + subSum }
+
+        val months = filteredTestData
+            .map { YearMonth.of(it.date.year, it.date.month) }
+            .distinct()
+
+        meterService.addRefills(testData)
+
+        val statsByMonth = meterService.getStatsByMonth(driverId)
+
+        assertTrue(statsByMonth.keys.containsAll(months))
+
+        val resultingSum = statsByMonth.values
+            .flatMap { it.values }
+            .map { it.totalPrice }
+            .reduce { acc, subSum -> acc + subSum }
+
+        assertEquals(sum, resultingSum)
+    }
+
+    private fun checkGetRefills(driverId: Long? = null) {
+        val testData = getTestFuelRefillsData()
+
+        val filteredTestData = testData.filter { driverId == null || it.driverId == driverId }
+
+        val months = filteredTestData
+            .map { YearMonth.of(it.date.year, it.date.month) }
+            .distinct()
+
+        meterService.addRefills(testData)
+
+        val refillsByMonth = meterService.getRefillsByMonth(driverId)
+
+        assertTrue(refillsByMonth.keys.containsAll(months))
+
+        val refills = refillsByMonth.values.flatten()
+
+        assertTrue(refills.containsAll(filteredTestData))
     }
 }
