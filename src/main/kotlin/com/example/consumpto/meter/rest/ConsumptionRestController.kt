@@ -1,12 +1,13 @@
 package com.example.consumpto.meter.rest
 
 import com.example.consumpto.meter.ConsumptoMeterService
-import com.example.consumpto.meter.dto.AddRefillDTO
+import com.example.consumpto.meter.dto.AddRefillDto
 import com.example.consumpto.meter.dto.DtoMapper
-import com.example.consumpto.meter.dto.RefillDTO
-import com.example.consumpto.meter.dto.StatDTO
+import com.example.consumpto.meter.dto.RefillDto
+import com.example.consumpto.meter.dto.StatDto
 import java.math.BigDecimal
 import javax.validation.Valid
+import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Positive
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
@@ -31,7 +32,7 @@ class ConsumptionRestController(
 ) {
     @PostMapping(path = [ADD_REFILLS_ENDPOINT])
     @ResponseBody
-    fun addRefills(@RequestBody @Valid addRefills: List<@Valid AddRefillDTO>): List<Long> {
+    fun addRefills(@RequestBody @Valid @NotEmpty addRefills: List<@Valid AddRefillDto>): List<Long> {
         return service.addRefills(addRefills.map { mapper.addRefillDtoToRefill(it) })
     }
 
@@ -43,13 +44,13 @@ class ConsumptionRestController(
 
     @GetMapping(path = [MONTHLY_REFILLS_ENDPOINT])
     @ResponseBody
-    fun getMonthlyRefills(@RequestBody @Valid @Positive driverId: Long? = null): Map<String, List<RefillDTO>> {
+    fun getMonthlyRefills(@RequestBody @Valid @Positive driverId: Long? = null): Map<String, List<RefillDto>> {
         return mapper.mapRefills(service.getRefillsByMonth(driverId))
     }
 
     @GetMapping(path = [MONTHLY_STATS_ENDPOINT])
     @ResponseBody
-    fun getMonthlyStats(@RequestBody @Valid @Positive driverId: Long? = null): Map<String, List<StatDTO>> {
+    fun getMonthlyStats(@RequestBody @Valid @Positive driverId: Long? = null): Map<String, List<StatDto>> {
         return mapper.mapStats(service.getStatsByMonth(driverId))
     }
 }

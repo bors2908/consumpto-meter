@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class DtoMapper {
-    fun addRefillDtoToRefill(addRefillDTO: AddRefillDTO): FuelRefill {
+    fun addRefillDtoToRefill(addRefillDTO: AddRefillDto): FuelRefill {
         return FuelRefill(
             addRefillDTO.fuelType,
             addRefillDTO.pricePerLiter,
@@ -25,16 +25,16 @@ class DtoMapper {
         return map.mapKeys { yearMonthToString(it.key) }
     }
 
-    fun mapRefills(map: Map<YearMonth, List<FuelRefill>>): Map<String, List<RefillDTO>> {
+    fun mapRefills(map: Map<YearMonth, List<FuelRefill>>): Map<String, List<RefillDto>> {
         return map.entries.associate { yearMonthToString(it.key) to it.value.map { refill -> refillToDto(refill) } }
     }
 
-    fun mapStats(map: Map<YearMonth, Map<FuelType, FuelStat>>): Map<String, List<StatDTO>> {
+    fun mapStats(map: Map<YearMonth, Map<FuelType, FuelStat>>): Map<String, List<StatDto>> {
         return map.entries.associate { yearMonthToString(it.key) to statToDto(it.value) }
     }
 
-    private fun refillToDto(refill: FuelRefill): RefillDTO {
-        return RefillDTO(
+    private fun refillToDto(refill: FuelRefill): RefillDto {
+        return RefillDto(
             refill.fuelType,
             refill.amount,
             refill.pricePerLiter,
@@ -42,12 +42,12 @@ class DtoMapper {
         )
     }
 
-    private fun statToDto(stats: Map<FuelType, FuelStat>): List<StatDTO> {
+    private fun statToDto(stats: Map<FuelType, FuelStat>): List<StatDto> {
         return stats
             .map {
                 val stat = it.value
 
-                StatDTO(
+                StatDto(
                     it.key,
                     stat.amount,
                     stat.avgPricePerLiter,
