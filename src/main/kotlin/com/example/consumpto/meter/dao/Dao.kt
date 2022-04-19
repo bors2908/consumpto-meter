@@ -5,7 +5,7 @@ import javax.validation.Valid
 import org.springframework.validation.annotation.Validated
 
 @Validated
-interface Dao<T: Entity> {
+interface Dao<T : Entity> {
     @Valid
     fun getAll(): Collection<@Valid T>
 

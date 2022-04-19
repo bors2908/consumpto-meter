@@ -7,5 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest
 class ConsumptoMeterApplicationTest {
     @Suppress("EmptyFunctionBlock")
     @Test
-    fun contextLoads() {}
+    fun contextLoads() {
+    }
 }

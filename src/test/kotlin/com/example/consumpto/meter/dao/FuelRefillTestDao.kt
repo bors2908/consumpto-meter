@@ -2,7 +2,7 @@ package com.example.consumpto.meter.dao
 
 import com.example.consumpto.meter.domain.FuelRefill
 
-class FuelRefillTestDao: FuelRefillDao() {
+class FuelRefillTestDao : FuelRefillDao() {
     private val storage = TestStorage<FuelRefill>()
 
     override fun getAllRefillsSorted(driverId: Long?): List<FuelRefill> {

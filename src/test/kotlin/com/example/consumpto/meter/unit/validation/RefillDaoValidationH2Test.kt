@@ -66,7 +66,7 @@ class RefillDaoValidationH2Test : RefillDaoValidationAbstractTest<FuelRefillH2Da
             "UPDATE $REFILLS_TABLE_NAME " +
                     "SET " +
                     "$PRICE_PER_LITER_COLUMN_NAME = ?, " +
-                    "$AMOUNT_COLUMN_NAME  = ?" +
+                    "$AMOUNT_COLUMN_NAME  = ? " +
                     "WHERE $ID_COLUMN_NAME > 0;",
             BigDecimal(-1.0),
             BigDecimal(-1.0)

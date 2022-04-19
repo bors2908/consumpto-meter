@@ -90,7 +90,7 @@ class ConsumptoMeterService(
     }
 
     private fun MutableMap<FuelType, FuelStat>.processRefillAndReturnMap(refill: FuelRefill)
-    : MutableMap<FuelType, FuelStat> {
+            : MutableMap<FuelType, FuelStat> {
         val stat = this.getOrPut(refill.fuelType) { FuelStat(BigDecimal.ZERO, BigDecimal.ZERO) }
 
         stat.amount += refill.amount

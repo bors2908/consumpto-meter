@@ -12,25 +12,25 @@ data class RefillDto(
     val fuelType: FuelType,
     val amount: BigDecimal,
     val pricePerLiter: BigDecimal,
-    val totalPrice: BigDecimal
+    val totalPrice: BigDecimal,
 )
 
 data class StatDto(
     val fuelType: FuelType,
     val amount: BigDecimal,
     val avgPricePerLiter: BigDecimal,
-    val totalPrice: BigDecimal
+    val totalPrice: BigDecimal,
 )
 
 data class AddRefillDto(
     val fuelType: FuelType,
 
     @field:DecimalMin(value = "0.0", inclusive = false, message = "Fuel price per liter must be positive.")
-    @field:Digits(integer=12, fraction=2)
+    @field:Digits(integer = 12, fraction = 2)
     val pricePerLiter: BigDecimal,
 
     @field:DecimalMin(value = "0.0", inclusive = false, message = "Fuel amount must be positive.")
-    @field:Digits(integer=12, fraction=2)
+    @field:Digits(integer = 12, fraction = 2)
     val amount: BigDecimal,
 
     @field:DateTimeFormat

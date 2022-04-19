@@ -42,7 +42,7 @@ class ConsumptionRestController(
         return mapper.mapMonthKeys(service.getCostByMonth(driverId))
     }
 
-    // I did't understand from the task, whether second endpoint should return monthly reports by fuel type
+    // I didn't understand from the task, whether second endpoint should return monthly reports by fuel type
     // or list of monthly refills, so I've implemented both.
     @GetMapping(path = [MONTHLY_REFILLS_ENDPOINT])
     @ResponseBody

@@ -211,7 +211,7 @@ class RestInputValidationTest {
             .andExpect(MockMvcResultMatchers.content().string(containsString("must be greater than 0")))
     }
 
-    fun getJsonRequestData(): JSONArray {
+    private fun getJsonRequestData(): JSONArray {
         val requestData = JSONArray((0..10).map {
             getRequestJsonObject()
         })
@@ -219,7 +219,7 @@ class RestInputValidationTest {
     }
 
     // Intentional avoidance of Jackson DTO mapping.
-    fun getRequestJsonObject(
+    private fun getRequestJsonObject(
         fuelType: FuelType = getRandomFuelType(),
         pricePerLiter: BigDecimal = getRandomFuelPrice(),
         amount: BigDecimal = getRandomFuelAmount(),

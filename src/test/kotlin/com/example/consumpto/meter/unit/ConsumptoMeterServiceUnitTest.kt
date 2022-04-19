@@ -63,7 +63,7 @@ class ConsumptoMeterServiceUnitTest {
                 getRandomFuelType(),
                 getRandomFuelPrice().negate(),
                 getRandomFuelAmount().negate(),
-                - getRandomDriver(),
+                -getRandomDriver(),
                 getRandomLocalDate()
             )
         ))
