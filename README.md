@@ -50,7 +50,7 @@ Response Body:
 
 ### Monthly spendings
 
-To get money spendings on fuel by month send a GET request to **/monthlyAmount** endpoint with empty body (overall) or with DriverId (specific driver)
+To get money spendings on fuel by month send a GET request to a **/monthlyAmount** endpoint with an empty body (overall) or with a DriverId (specific driver)
 
 **GET**  *URL*:8099/consumption/monthlyAmount
 
@@ -72,7 +72,7 @@ Response Body:
 
 ### Monthly refills grouped
 
-To get grouped list of anonymous fuel refills by by month send a GET request to **/monthlyRefills** endpoint with empty body (overall) or with DriverId (specific driver)
+To get a grouped list of anonymous fuel refills, grouped by month send a GET request to a **/monthlyRefills** endpoint with an empty body (overall) or with DriverId (specific driver)
 
 **GET**  *URL*:8099/consumption/monthlyRefills
 
@@ -114,7 +114,7 @@ Response Body:
 
 ### Monthly refill statistics by fuel type
 
-To get monthly reports of refills for each fuel type a GET request to **/monthlyStats** endpoint with empty body (overall) or with DriverId (specific driver)
+To get monthly reports of refills for each fuel type a GET request to **/monthlyStats** endpoint with an empty body (overall) or with DriverId (specific driver)
 
 **GET**  *URL*:8099/consumption/monthlyStats
 
