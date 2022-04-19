@@ -29,11 +29,13 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.hibernate:hibernate-validator:7.0.4.Final")
+    implementation("io.github.microutils:kotlin-logging:2.1.21")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.h2database:h2")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
 }
 
 tasks.withType<KotlinCompile> {
