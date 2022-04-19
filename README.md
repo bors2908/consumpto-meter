@@ -1,14 +1,14 @@
 # consumpto-meter
 Demo project. An example of my understanding of how it should be "by-the-book". 
 
-Allows to register fuel refills from multiple drivers and receive detailed stats about monthly fuel consumption.
+Allows registering fuel refills from multiple drivers and receive detailed stats about monthly fuel consumption.
 
 Mostly finished. Requires some polish. 
 
 Javadocs and some dao tests are absent due to time constraints.
 
 I didn't really get the part of the task about "fuel consumption reports grouped by month": 
-whether it should be monthly reports for each fuel type consumpton or monthly separated lists of anonymous refill, so I've done both.
+whether it should be monthly reports for each fuel type consumption or monthly separated lists of anonymous refill, so I've done both.
 
 ## Usage
 
