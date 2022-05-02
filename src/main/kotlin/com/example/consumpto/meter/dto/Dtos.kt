@@ -22,7 +22,7 @@ data class StatDto(
     val totalPrice: BigDecimal,
 )
 
-data class AddRefillDto(
+data class NewRefillDto(
     val fuelType: FuelType,
 
     @field:DecimalMin(value = "0.0", inclusive = false, message = "Fuel price per liter must be positive.")

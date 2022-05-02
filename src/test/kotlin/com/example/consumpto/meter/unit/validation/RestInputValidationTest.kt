@@ -1,32 +1,27 @@
 package com.example.consumpto.meter.unit.validation
 
-import com.example.consumpto.meter.service.StatisticService
 import com.example.consumpto.meter.domain.FuelType
-import com.example.consumpto.meter.dto.DtoMapper
+import com.example.consumpto.meter.dto.mapper.DtoMapperResolver
 import com.example.consumpto.meter.getRandomDriver
 import com.example.consumpto.meter.getRandomFuelAmount
 import com.example.consumpto.meter.getRandomFuelPrice
 import com.example.consumpto.meter.getRandomFuelType
 import com.example.consumpto.meter.getRandomLocalDate
-import com.example.consumpto.meter.getRandomizedRefill
-import com.example.consumpto.meter.rest.ADD_REFILLS_ENDPOINT
 import com.example.consumpto.meter.rest.CONSUMPTION_URL_PATH
 import com.example.consumpto.meter.rest.ConsumptionRestController
 import com.example.consumpto.meter.rest.MONTHLY_AMOUNT_ENDPOINT
 import com.example.consumpto.meter.rest.MONTHLY_REFILLS_ENDPOINT
 import com.example.consumpto.meter.rest.MONTHLY_STATS_ENDPOINT
+import com.example.consumpto.meter.rest.NEW_REFILLS_ENDPOINT
 import com.example.consumpto.meter.service.NewRefillService
+import com.example.consumpto.meter.service.StatisticService
 import java.math.BigDecimal
 import java.time.LocalDate
 import org.hamcrest.Matchers.containsString
 import org.json.JSONArray
 import org.json.JSONObject
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.mockito.kotlin.anyOrNull
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -37,6 +32,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
+@Suppress("UnusedPrivateMember")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @WebMvcTest(ConsumptionRestController::class)
 class RestInputValidationTest {
@@ -44,40 +40,13 @@ class RestInputValidationTest {
     private lateinit var mockMvc: MockMvc
 
     @MockBean
-    private lateinit var mapper: DtoMapper
+    private lateinit var mapperResolver: DtoMapperResolver
 
     @MockBean
     private lateinit var statisticService: StatisticService
 
     @MockBean
     private lateinit var newRefillService: NewRefillService
-
-    @BeforeAll
-    fun initMocks() {
-        whenever(newRefillService.addRefills(anyOrNull())).doReturn(emptyList())
-        whenever(statisticService.getCostByMonth()).doReturn(emptyMap())
-        whenever(statisticService.getRefillsByMonth()).doReturn(emptyMap())
-        whenever(statisticService.getStatsByMonth()).doReturn(emptyMap())
-
-        whenever(mapper.addRefillDtoToRefill(anyOrNull())).doReturn(getRandomizedRefill())
-        whenever(mapper.mapMonthKeys<Any>(anyOrNull())).doReturn(emptyMap())
-        whenever(mapper.mapRefills(anyOrNull())).doReturn(emptyMap())
-        whenever(mapper.mapStats(anyOrNull())).doReturn(emptyMap())
-    }
-
-    @Test
-    fun testValidData() {
-        val requestData = getJsonRequestData()
-
-        mockMvc
-            .perform(
-                post(CONSUMPTION_URL_PATH + ADD_REFILLS_ENDPOINT)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(requestData.toString())
-            )
-            .andDo(print())
-            .andExpect(MockMvcResultMatchers.status().isOk)
-    }
 
     @Test
     fun testWrongPriceFormat() {
@@ -87,7 +56,7 @@ class RestInputValidationTest {
 
         mockMvc
             .perform(
-                post(CONSUMPTION_URL_PATH + ADD_REFILLS_ENDPOINT)
+                post(CONSUMPTION_URL_PATH + NEW_REFILLS_ENDPOINT)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(requestData.toString())
             )
@@ -104,7 +73,7 @@ class RestInputValidationTest {
 
         mockMvc
             .perform(
-                post(CONSUMPTION_URL_PATH + ADD_REFILLS_ENDPOINT)
+                post(CONSUMPTION_URL_PATH + NEW_REFILLS_ENDPOINT)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(requestData.toString())
             )
@@ -121,7 +90,7 @@ class RestInputValidationTest {
 
         mockMvc
             .perform(
-                post(CONSUMPTION_URL_PATH + ADD_REFILLS_ENDPOINT)
+                post(CONSUMPTION_URL_PATH + NEW_REFILLS_ENDPOINT)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(requestData.toString())
             )
@@ -136,7 +105,7 @@ class RestInputValidationTest {
 
         mockMvc
             .perform(
-                post(CONSUMPTION_URL_PATH + ADD_REFILLS_ENDPOINT)
+                post(CONSUMPTION_URL_PATH + NEW_REFILLS_ENDPOINT)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(requestData.toString())
             )
@@ -153,7 +122,7 @@ class RestInputValidationTest {
 
         mockMvc
             .perform(
-                post(CONSUMPTION_URL_PATH + ADD_REFILLS_ENDPOINT)
+                post(CONSUMPTION_URL_PATH + NEW_REFILLS_ENDPOINT)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(requestData.toString())
             )
@@ -170,7 +139,7 @@ class RestInputValidationTest {
 
         mockMvc
             .perform(
-                post(CONSUMPTION_URL_PATH + ADD_REFILLS_ENDPOINT)
+                post(CONSUMPTION_URL_PATH + NEW_REFILLS_ENDPOINT)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(requestData.toString())
             )
@@ -187,7 +156,7 @@ class RestInputValidationTest {
 
         mockMvc
             .perform(
-                post(CONSUMPTION_URL_PATH + ADD_REFILLS_ENDPOINT)
+                post(CONSUMPTION_URL_PATH + NEW_REFILLS_ENDPOINT)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(requestData.toString())
             )

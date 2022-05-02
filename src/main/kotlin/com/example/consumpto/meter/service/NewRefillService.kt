@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 class NewRefillService(
     private val refillDao: FuelRefillDao,
 ) {
-    fun addRefills(refills: List<FuelRefill>): List<Long> {
+    fun newRefills(refills: List<FuelRefill>): List<Long> {
         return refillDao.addAll(refills)
     }
 }

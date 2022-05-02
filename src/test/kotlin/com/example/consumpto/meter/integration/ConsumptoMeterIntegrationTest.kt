@@ -2,7 +2,7 @@ package com.example.consumpto.meter.integration
 
 import com.example.consumpto.meter.currencyScale
 import com.example.consumpto.meter.dao.FuelRefillDao
-import com.example.consumpto.meter.dto.AddRefillDto
+import com.example.consumpto.meter.dto.NewRefillDto
 import com.example.consumpto.meter.dto.RefillDto
 import com.example.consumpto.meter.dto.StatDto
 import com.example.consumpto.meter.getRandomDriver
@@ -10,7 +10,7 @@ import com.example.consumpto.meter.getRandomFuelAmount
 import com.example.consumpto.meter.getRandomFuelPrice
 import com.example.consumpto.meter.getRandomFuelType
 import com.example.consumpto.meter.getRandomLocalDate
-import com.example.consumpto.meter.rest.ADD_REFILLS_ENDPOINT
+import com.example.consumpto.meter.rest.NEW_REFILLS_ENDPOINT
 import com.example.consumpto.meter.rest.CONSUMPTION_URL_PATH
 import com.example.consumpto.meter.rest.MONTHLY_AMOUNT_ENDPOINT
 import com.example.consumpto.meter.rest.MONTHLY_REFILLS_ENDPOINT
@@ -102,8 +102,8 @@ class ConsumptoMeterIntegrationTest {
         assertTrue(resultingRefills.size == filteredTestData.size)
     }
 
-    private fun addRefills(refills: List<AddRefillDto>): List<Long> {
-        return sendRequest(HttpMethod.POST, CONSUMPTION_URL_PATH + ADD_REFILLS_ENDPOINT, refills)
+    private fun addRefills(refills: List<NewRefillDto>): List<Long> {
+        return sendRequest(HttpMethod.POST, CONSUMPTION_URL_PATH + NEW_REFILLS_ENDPOINT, refills)
     }
 
     private fun getCostByMonth(driverId: Long?): Map<String, BigDecimal> {
@@ -142,9 +142,9 @@ class ConsumptoMeterIntegrationTest {
         return jsonMapper.readValue(responseBody, object : TypeReference<T>() {})
     }
 
-    private fun generateAddRefillTestDtos(count: Int): List<AddRefillDto> = (1..count)
+    private fun generateAddRefillTestDtos(count: Int): List<NewRefillDto> = (1..count)
         .map {
-            AddRefillDto(
+            NewRefillDto(
                 getRandomFuelType(),
                 getRandomFuelPrice(),
                 getRandomFuelAmount(),

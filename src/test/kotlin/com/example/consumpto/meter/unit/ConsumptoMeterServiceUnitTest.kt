@@ -59,7 +59,7 @@ class ConsumptoMeterServiceUnitTest {
 
     @Test
     fun addInvalidRefills() {
-        newRefillService.addRefills(listOf(
+        newRefillService.newRefills(listOf(
             FuelRefill(
                 getRandomFuelType(),
                 getRandomFuelPrice().negate(),
@@ -83,7 +83,7 @@ class ConsumptoMeterServiceUnitTest {
             .map { YearMonth.of(it.date.year, it.date.month) }
             .distinct()
 
-        newRefillService.addRefills(testData)
+        newRefillService.newRefills(testData)
 
         val costByMonth = statisticService.getCostByMonth(driverId)
 
@@ -107,7 +107,7 @@ class ConsumptoMeterServiceUnitTest {
             .map { YearMonth.of(it.date.year, it.date.month) }
             .distinct()
 
-        newRefillService.addRefills(testData)
+        newRefillService.newRefills(testData)
 
         val statsByMonth = statisticService.getStatsByMonth(driverId)
 
@@ -130,7 +130,7 @@ class ConsumptoMeterServiceUnitTest {
             .map { YearMonth.of(it.date.year, it.date.month) }
             .distinct()
 
-        newRefillService.addRefills(testData)
+        newRefillService.newRefills(testData)
 
         val refillsByMonth = statisticService.getRefillsByMonth(driverId)
 
