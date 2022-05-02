@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 
 const val CONSUMPTION_URL_PATH = "/consumption"
-const val ADD_REFILLS_ENDPOINT = "/addRefills"
+const val ADD_REFILLS_ENDPOINT = "/newRefills"
 const val MONTHLY_AMOUNT_ENDPOINT = "/monthlyAmount"
 const val MONTHLY_REFILLS_ENDPOINT = "/monthlyRefills"
 const val MONTHLY_STATS_ENDPOINT = "/monthlyStats"

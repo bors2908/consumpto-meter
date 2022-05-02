@@ -16,9 +16,9 @@ A Program is accessed via simple REST API on port 8099 (configurable) on path "/
 
 
 ### Add refill
-To add new fuel refill data, send a POST request to an **/addRefills** endpoint with JSON-formatted body, that consists of array of fuel refills:
+To add new fuel refill data, send a POST request to an **/newRefills** endpoint with JSON-formatted body, that consists of array of fuel refills:
 
-**POST**  *URL*:8099/consumption/addRefills
+**POST**  *URL*:8099/consumption/newRefills
 
 Request Body:
 ```
