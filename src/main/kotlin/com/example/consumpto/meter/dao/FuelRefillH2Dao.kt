@@ -49,13 +49,18 @@ class FuelRefillH2Dao(private val jdbcTemplate: JdbcTemplate) : FuelRefillDao() 
     }
 
     override fun getAllRefillsSorted(driverId: Long?): List<FuelRefill> {
-        return jdbcTemplate.query(
-            "SELECT * " +
-                    "FROM $REFILLS_TABLE_NAME " +
-                    if (driverId != null) "WHERE $DRIVER_ID_COLUMN_NAME = $driverId " else "" +
-                    "ORDER BY $DATE_COLUMN_NAME;",
-            RefillRowMapper()
-        )
+        val selectPrefix = "SELECT * FROM $REFILLS_TABLE_NAME "
+        val orderPostfix = "ORDER BY $DATE_COLUMN_NAME;"
+
+        return if (driverId == null) {
+            jdbcTemplate.query(selectPrefix + orderPostfix, RefillRowMapper())
+        } else {
+            jdbcTemplate.query(
+                selectPrefix + "WHERE $DRIVER_ID_COLUMN_NAME = ? " + orderPostfix,
+                RefillRowMapper(),
+                driverId
+            )
+        }
     }
 
     override fun getAll(): List<FuelRefill> {
