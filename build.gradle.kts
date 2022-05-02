@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "me.bors"
-version = "0.9.0-Beta"
+version = "0.9.1-Beta"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 configurations {
