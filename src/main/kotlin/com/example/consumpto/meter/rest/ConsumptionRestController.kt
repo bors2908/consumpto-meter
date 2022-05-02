@@ -1,10 +1,11 @@
 package com.example.consumpto.meter.rest
 
-import com.example.consumpto.meter.ConsumptoMeterService
+import com.example.consumpto.meter.service.StatisticService
 import com.example.consumpto.meter.dto.AddRefillDto
 import com.example.consumpto.meter.dto.DtoMapper
 import com.example.consumpto.meter.dto.RefillDto
 import com.example.consumpto.meter.dto.StatDto
+import com.example.consumpto.meter.service.NewRefillService
 import java.math.BigDecimal
 import javax.validation.Valid
 import javax.validation.constraints.NotEmpty
@@ -27,19 +28,20 @@ const val MONTHLY_STATS_ENDPOINT = "/monthlyStats"
 @RestController
 @RequestMapping(CONSUMPTION_URL_PATH)
 class ConsumptionRestController(
-    private val service: ConsumptoMeterService,
+    private val statisticService: StatisticService,
+    private val newRefillService: NewRefillService,
     private val mapper: DtoMapper,
 ) {
     @PostMapping(path = [ADD_REFILLS_ENDPOINT])
     @ResponseBody
     fun addRefills(@RequestBody @Valid @NotEmpty addRefills: List<@Valid AddRefillDto>): List<Long> {
-        return service.addRefills(addRefills.map { mapper.addRefillDtoToRefill(it) })
+        return newRefillService.addRefills(addRefills.map { mapper.addRefillDtoToRefill(it) })
     }
 
     @GetMapping(path = [MONTHLY_AMOUNT_ENDPOINT])
     @ResponseBody
     fun getMonthlyAmount(@RequestBody @Valid @Positive driverId: Long? = null): Map<String, BigDecimal> {
-        return mapper.mapMonthKeys(service.getCostByMonth(driverId))
+        return mapper.mapMonthKeys(statisticService.getCostByMonth(driverId))
     }
 
     // I didn't understand from the task, whether second endpoint should return monthly reports by fuel type
@@ -47,12 +49,12 @@ class ConsumptionRestController(
     @GetMapping(path = [MONTHLY_REFILLS_ENDPOINT])
     @ResponseBody
     fun getMonthlyRefills(@RequestBody @Valid @Positive driverId: Long? = null): Map<String, List<RefillDto>> {
-        return mapper.mapRefills(service.getRefillsByMonth(driverId))
+        return mapper.mapRefills(statisticService.getRefillsByMonth(driverId))
     }
 
     @GetMapping(path = [MONTHLY_STATS_ENDPOINT])
     @ResponseBody
     fun getMonthlyStats(@RequestBody @Valid @Positive driverId: Long? = null): Map<String, List<StatDto>> {
-        return mapper.mapStats(service.getStatsByMonth(driverId))
+        return mapper.mapStats(statisticService.getStatsByMonth(driverId))
     }
 }

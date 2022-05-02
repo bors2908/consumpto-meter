@@ -1,16 +1,17 @@
-package com.example.consumpto.meter
+package com.example.consumpto.meter.service
 
 import com.example.consumpto.meter.dao.FuelRefillDao
 import com.example.consumpto.meter.domain.Entity
 import com.example.consumpto.meter.domain.FuelRefill
 import com.example.consumpto.meter.domain.FuelStat
 import com.example.consumpto.meter.domain.FuelType
+import com.example.consumpto.meter.toYearMonth
 import java.math.BigDecimal
 import java.time.YearMonth
 import org.springframework.stereotype.Service
 
 @Service
-class ConsumptoMeterService(
+class StatisticService(
     private val refillDao: FuelRefillDao,
 ) {
     fun getCostByMonth(driverId: Long? = null): Map<YearMonth, BigDecimal> {
@@ -41,10 +42,6 @@ class ConsumptoMeterService(
             newAcc = { mutableMapOf() },
             addToAcc = { acc, entity -> acc.processRefillAndReturnMap(entity) }
         )
-    }
-
-    fun addRefills(refills: List<FuelRefill>): List<Long> {
-        return refillDao.addAll(refills)
     }
 
     // Processes a list of entities with date and groups it by month.

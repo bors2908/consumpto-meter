@@ -1,6 +1,6 @@
 package com.example.consumpto.meter.unit.validation
 
-import com.example.consumpto.meter.ConsumptoMeterService
+import com.example.consumpto.meter.service.StatisticService
 import com.example.consumpto.meter.domain.FuelType
 import com.example.consumpto.meter.dto.DtoMapper
 import com.example.consumpto.meter.getRandomDriver
@@ -15,6 +15,7 @@ import com.example.consumpto.meter.rest.ConsumptionRestController
 import com.example.consumpto.meter.rest.MONTHLY_AMOUNT_ENDPOINT
 import com.example.consumpto.meter.rest.MONTHLY_REFILLS_ENDPOINT
 import com.example.consumpto.meter.rest.MONTHLY_STATS_ENDPOINT
+import com.example.consumpto.meter.service.NewRefillService
 import java.math.BigDecimal
 import java.time.LocalDate
 import org.hamcrest.Matchers.containsString
@@ -46,14 +47,17 @@ class RestInputValidationTest {
     private lateinit var mapper: DtoMapper
 
     @MockBean
-    private lateinit var service: ConsumptoMeterService
+    private lateinit var statisticService: StatisticService
+
+    @MockBean
+    private lateinit var newRefillService: NewRefillService
 
     @BeforeAll
     fun initMocks() {
-        whenever(service.addRefills(anyOrNull())).doReturn(emptyList())
-        whenever(service.getCostByMonth()).doReturn(emptyMap())
-        whenever(service.getRefillsByMonth()).doReturn(emptyMap())
-        whenever(service.getStatsByMonth()).doReturn(emptyMap())
+        whenever(newRefillService.addRefills(anyOrNull())).doReturn(emptyList())
+        whenever(statisticService.getCostByMonth()).doReturn(emptyMap())
+        whenever(statisticService.getRefillsByMonth()).doReturn(emptyMap())
+        whenever(statisticService.getStatsByMonth()).doReturn(emptyMap())
 
         whenever(mapper.addRefillDtoToRefill(anyOrNull())).doReturn(getRandomizedRefill())
         whenever(mapper.mapMonthKeys<Any>(anyOrNull())).doReturn(emptyMap())
