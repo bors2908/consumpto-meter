@@ -31,11 +31,6 @@ class NewRefillDtoMapper : DtoMapper<List<NewRefillDto>, List<FuelRefill>>() {
 }
 
 @Component
-class MonthlyBigDecimalDtoMapper : MapMonthKeyDtoMapper<BigDecimal>() {
-    override val typeSignature = TypeSignature<Map<YearMonth, BigDecimal>, Map<String, BigDecimal>>()
-}
-
-@Component
 class StatDtoMapper : DtoMapper<Map<YearMonth, Map<FuelType, FuelStat>>, Map<String, List<StatDto>>>() {
     override val typeSignature = TypeSignature<Map<YearMonth, Map<FuelType, FuelStat>>, Map<String, List<StatDto>>>()
 
@@ -75,6 +70,11 @@ class RefillDtoMapper : DtoMapper<Map<YearMonth, List<FuelRefill>>, Map<String, 
             refill.cost
         )
     }
+}
+
+@Component
+class MonthlyBigDecimalDtoMapper : MapMonthKeyDtoMapper<BigDecimal>() {
+    override val typeSignature = TypeSignature<Map<YearMonth, BigDecimal>, Map<String, BigDecimal>>()
 }
 
 abstract class MapMonthKeyDtoMapper<V: Any> : DtoMapper<Map<YearMonth, V>, Map<String, V>>() {
