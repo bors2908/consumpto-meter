@@ -4,20 +4,20 @@ import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
 abstract class DtoMapper<T: Any, R: Any> {
-    abstract val typeSignature: TypeSignature
+    abstract val typeSignature: TypeSignature<T, R>
 
     abstract fun map(from: T): R
 
-    class TypeSignature(val from: KType, val to: KType) {
+    class TypeSignature<T, R>(val from: KType, val to: KType) {
         companion object {
-            inline operator fun <reified T: Any, reified R: Any> invoke() = TypeSignature(typeOf<T>(), typeOf<R>())
+            inline operator fun <reified T: Any, reified R: Any> invoke() = TypeSignature<T, R>(typeOf<T>(), typeOf<R>())
         }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (javaClass != other?.javaClass) return false
 
-            other as TypeSignature
+            other as TypeSignature<*, *>
 
             if (from != other.from) return false
             if (to != other.to) return false
