@@ -73,11 +73,11 @@ class RefillDtoMapper : DtoMapper<Map<YearMonth, List<FuelRefill>>, Map<String, 
 }
 
 @Component
-class MonthlyBigDecimalDtoMapper : MapMonthKeyDtoMapper<BigDecimal>() {
+class MonthlyBigDecimalDtoMapper : MonthKeyDtoMapper<BigDecimal>() {
     override val typeSignature = TypeSignature<Map<YearMonth, BigDecimal>, Map<String, BigDecimal>>()
 }
 
-abstract class MapMonthKeyDtoMapper<V: Any> : DtoMapper<Map<YearMonth, V>, Map<String, V>>() {
+abstract class MonthKeyDtoMapper<V: Any> : DtoMapper<Map<YearMonth, V>, Map<String, V>>() {
     override fun map(from: Map<YearMonth, V>): Map<String, V> {
         return from.mapKeys { it.key.toYearMonthLocalizedString() }
     }
